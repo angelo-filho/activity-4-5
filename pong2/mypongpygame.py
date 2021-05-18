@@ -137,8 +137,8 @@ while game_loop:
             scoring_sound_effect.play()
 
         # ball movement
-        ball.x += ball_dx
-        ball.y += ball_dy
+        ball.x += ball_speed * ball_dx
+        ball.y += ball_speed * ball_dy
 
         # player 1 up movement
         if player_1_move_up:
