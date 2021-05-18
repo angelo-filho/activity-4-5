@@ -1,4 +1,6 @@
 import pygame
+from random import randint
+from math import radians, cos, sin
 
 pygame.init()
 
@@ -19,7 +21,7 @@ score_text_rect.center = (680, 50)
 
 # victory text
 victory_font = pygame.font.Font('assets/PressStart2P.ttf', 100)
-victory_text = victory_font .render('VICTORY', True, COLOR_WHITE, COLOR_BLACK)
+victory_text = victory_font.render('VICTORY', True, COLOR_WHITE, COLOR_BLACK)
 victory_text_rect = score_text.get_rect()
 victory_text_rect.center = (450, 350)
 
@@ -40,8 +42,32 @@ player_2 = player_2_image.get_rect().move(1180, 300)
 # ball
 ball_image = pygame.image.load("assets/ball.png").convert()
 ball = ball_image.get_rect().move(640, 360)
-ball_dx = 5
-ball_dy = 5
+ball_dx = 1
+ball_dy = 1
+ball_speed = 7
+
+
+def randomize_angle():
+    global ball_dx, ball_dy
+
+    random_angle = randint(45, 55)
+    angle = radians(random_angle)
+    ball_dx = cos(angle)
+    ball_dy = sin(angle)
+
+
+def change_angle(player_rect: pygame.rect.Rect, x_direction):
+    global ball_dx, ball_dy
+
+    if player_rect.top <= ball.bottom <= player_rect.top + 60:
+        ball_dy *= -1
+        ball_dx *= x_direction
+    elif player_rect.bottom >= ball.top >= player_rect.bottom - 60:
+        ball_dx *= x_direction
+    elif player_rect.centery - 15 < ball.centery < player_rect.centery + 15:
+        ball_dy = 0
+        ball_dx *= x_direction * 2
+
 
 # score
 score_1 = 0
@@ -71,7 +97,6 @@ while game_loop:
 
     # checking the victory condition
     if score_1 < SCORE_MAX and score_2 < SCORE_MAX:
-
         # clear screen
         screen.fill(COLOR_BLACK)
 
@@ -85,12 +110,14 @@ while game_loop:
 
         # ball collision with the player 1 's paddle
         if ball.colliderect(player_1) and ball_dx < 0:
-            ball_dx *= -1
+            randomize_angle()
+            change_angle(player_1, 1)
             bounce_sound_effect.play()
 
         # ball collision with the player 2 's paddle
         if ball.colliderect(player_2) and ball_dx > 0:
-            ball_dx *= -1
+            randomize_angle()
+            change_angle(player_2, -1)
             bounce_sound_effect.play()
 
         # scoring points
