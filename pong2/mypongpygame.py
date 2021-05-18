@@ -38,6 +38,7 @@ player_1_move_down = False
 # player 2 - robot
 player_2_image = pygame.image.load("assets/player.png").convert()
 player_2 = player_2_image.get_rect().move(1180, 300)
+player_2_speed = 2
 
 # ball
 ball_image = pygame.image.load("assets/ball.png").convert()
@@ -161,7 +162,11 @@ while game_loop:
             player_1.y = 570
 
         # player 2 "Artificial Intelligence"
-        player_2.y = ball.y
+        if player_2.y < ball.y:
+            player_2.y += player_2_speed
+        else:
+            player_2.y -= player_2_speed
+
         if player_2.y <= 0:
             player_2.y = 0
         elif player_2.y >= 570:
