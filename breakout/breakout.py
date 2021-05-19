@@ -49,7 +49,6 @@ while run:
             run = False
 
     move_ball()
-    bar_update()
 
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (255, 255, 255), ball)
