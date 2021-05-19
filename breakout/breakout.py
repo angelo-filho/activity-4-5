@@ -1,5 +1,6 @@
 import pygame
 
+
 width, height = 893, 1000
 size = (width, height)
 screen = pygame.display.set_mode(size, pygame.RESIZABLE)
@@ -54,3 +55,4 @@ while run:
     pygame.display.flip()
     pygame.display.update()
 pygame.quit()
+
