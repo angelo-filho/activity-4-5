@@ -2,7 +2,7 @@ import pygame
 
 width, height = 893, 680
 size = (width, height)
-screen = pygame.display.set_mode(size)
+screen = pygame.display.set_mode(size, pygame.RESIZABLE)
 background_colour = (0, 0, 0)
 screen.fill(background_colour)
 pygame.display.set_caption('BREAKOUT')
