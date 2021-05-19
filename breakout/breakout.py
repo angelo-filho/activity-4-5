@@ -12,29 +12,45 @@ FPS = 60
 
 
 def move_bar():
-
-    return null
+    pass
 
 
 def move_ball():
-    return null
+    ball.x += ball_dx
+    ball.y += ball_dy
+
+    collision_ball_wall()
 
 
 def collision_ball_wall():
-    return null
+    global ball_dx
+
+    if ball.left <= 0 or ball.right >= size[0]:
+        ball_dx *= -1
 
 
 def collision_ball_bricks():
-    return null
+    pass
 
 
 def draw_bricks():
-    return null
+    pass
 
+
+ball = pygame.rect.Rect(size[0] / 2, size[0] / 2, 20, 20)
+ball_dx = 1
+ball_dy = 1
 
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            run = False
+
+    move_ball()
+
+    screen.fill((0, 0, 0))
+    pygame.draw.rect(screen, (255, 255, 255), ball)
+
+    pygame.display.flip()
     pygame.display.update()
 pygame.quit()
