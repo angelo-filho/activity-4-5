@@ -33,6 +33,12 @@ def collision_ball_bricks():
     pass
 
 
+def collision_ball_player():
+    global ball_dy
+    if ball.colliderect(bar) and ball_dy > 0:
+        ball_dy *= 1
+
+
 def draw_bricks():
     pass
 
@@ -41,7 +47,7 @@ ball = pygame.rect.Rect(size[0] / 2, size[0] / 2, 20, 20)
 ball_dx = 1
 ball_dy = 1
 
-bar = pygame.rect.Rect(screen.get_width() / 2, height - 40, 100, 30)
+bar = pygame.rect.Rect((screen.get_width() / 2) - 50, height - 40, 100, 30)
 
 while run:
     for event in pygame.event.get():
