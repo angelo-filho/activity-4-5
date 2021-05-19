@@ -1,12 +1,12 @@
 import keyword
-from _hashlib import HASH
+from Classes.Paddle import Paddle
 import pygame
 
 pygame.init()
 
-WIDTH, HEIGHT = 893, 680
+WIDTH, HEIGHT = 800, 680
 size = (WIDTH, HEIGHT)
-screen = pygame.display.set_mode(size, pygame.RESIZABLE)
+screen = pygame.display.set_mode(size)
 background_colour = (0, 0, 0)
 screen.fill(background_colour)
 pygame.display.set_caption('BREAKOUT')
@@ -59,14 +59,14 @@ while run:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        paddle.moveLeft(5)
+        paddle.move_left(5)
     if keys[pygame.K_RIGHT]:
-        paddle.moveRight(5)
+        paddle.move_right(5)
 
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (255, 255, 255), ball)
-    pygame.draw.rect(screen, (61, 164, 163), bar)
-
+    sprites.draw(screen)
     pygame.display.flip()
     pygame.display.update()
+    clock.tick(FPS)
 pygame.quit()
