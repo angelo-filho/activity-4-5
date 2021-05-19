@@ -1,4 +1,3 @@
-import keyword
 from Classes.Paddle import Paddle
 import pygame
 
