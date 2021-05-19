@@ -16,6 +16,7 @@ class Ball(pygame.sprite.Sprite):
     def update(self):
         pass
 
+
     def collision_ball_wall(self):
         global ball_dx
 
