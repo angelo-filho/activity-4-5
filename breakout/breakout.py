@@ -1,8 +1,8 @@
 import keyword
 from _hashlib import HASH
-
 import pygame
 
+pygame.init()
 
 WIDTH, HEIGHT = 893, 680
 size = (WIDTH, HEIGHT)
@@ -14,7 +14,13 @@ run = True
 clock = pygame.time.Clock()
 FPS = 60
 color = 61, 164, 163
-bar = pygame.rect.Rect(screen.get_width() / 2, HEIGHT - 40, 100, 30)
+sprites = pygame.sprite.Group()
+paddle = Paddle(color, 100, 30)
+paddle.rect.x = 350
+paddle.rect.y = 560
+
+
+sprites.add(paddle)
 
 
 def move_ball():
@@ -44,16 +50,6 @@ ball_dx = 1
 ball_dy = 1
 
 
-def move_right():
-    if bar.x > WIDTH - 16:
-        bar.x = WIDTH - 16
-
-
-def move_left():
-    if bar.x < WIDTH:
-        bar.x = WIDTH
-
-
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -63,15 +59,12 @@ while run:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        move_left()
-
+        paddle.moveLeft(5)
     if keys[pygame.K_RIGHT]:
-        move_right()
+        paddle.moveRight(5)
 
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (255, 255, 255), ball)
-    pygame.draw.rect(screen, (61, 164, 163), bar)
-    pygame.draw.rect(screen, color, bar)
 
     pygame.display.flip()
     pygame.display.update()
