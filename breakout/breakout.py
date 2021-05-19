@@ -1,7 +1,11 @@
+import keyword
+from _hashlib import HASH
 import pygame
 
-width, height = 893, 680
-size = (width, height)
+pygame.init()
+
+WIDTH, HEIGHT = 893, 680
+size = (WIDTH, HEIGHT)
 screen = pygame.display.set_mode(size, pygame.RESIZABLE)
 background_colour = (0, 0, 0)
 screen.fill(background_colour)
@@ -9,10 +13,14 @@ pygame.display.set_caption('BREAKOUT')
 run = True
 clock = pygame.time.Clock()
 FPS = 60
+color = 61, 164, 163
+sprites = pygame.sprite.Group()
+paddle = Paddle(color, 100, 30)
+paddle.rect.x = 350
+paddle.rect.y = 560
 
 
-def move_bar():
-    pass
+sprites.add(paddle)
 
 
 def move_ball():
@@ -33,12 +41,6 @@ def collision_ball_bricks():
     pass
 
 
-def collision_ball_player():
-    global ball_dy
-    if ball.colliderect(bar) and ball_dy > 0:
-        ball_dy *= 1
-
-
 def draw_bricks():
     pass
 
@@ -47,7 +49,6 @@ ball = pygame.rect.Rect(size[0] / 2, size[0] / 2, 20, 20)
 ball_dx = 1
 ball_dy = 1
 
-bar = pygame.rect.Rect((screen.get_width() / 2) - 50, height - 40, 100, 30)
 
 while run:
     for event in pygame.event.get():
@@ -55,6 +56,12 @@ while run:
             run = False
 
     move_ball()
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        paddle.moveLeft(5)
+    if keys[pygame.K_RIGHT]:
+        paddle.moveRight(5)
 
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (255, 255, 255), ball)
