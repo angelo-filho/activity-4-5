@@ -24,7 +24,7 @@ paddle.rect.y = 640
 # Ball
 ball = Ball(color, 20, 20)
 ball.rect.x = 300
-ball.rect.y = 300
+ball.rect.y = 400
 
 sprites.add(paddle)
 sprites.add(ball)
@@ -41,6 +41,9 @@ while run:
         paddle.move_right()
 
     sprites.update()
+
+    if ball.rect.bottom >= HEIGHT + 30:
+        ball.reset_ball()
 
     if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
         ball.collision_with_paddle(paddle.rect)

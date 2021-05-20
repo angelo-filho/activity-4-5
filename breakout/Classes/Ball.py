@@ -15,12 +15,26 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, color, [0, 0, width, height])
         self.rect = self.image.get_rect()
 
-        self.speed = 5
+        self.MIN_SPEED = 5
+        self.MAX_SPEED = 10
+        self.speed_increment = 0.5
+        self.speed = self.MIN_SPEED
+
         self.dx = 1
         self.dy = 1
 
+        self.restart_frames = 0
+        self.MAX_RESTART_FRAMES = 120
+
+        self.MOVE_STATE = 0
+        self.RESTART_STATE = 1
+        self.state = self.MOVE_STATE
+
     def update(self):
-        self.movement()
+        if self.state == self.MOVE_STATE:
+            self.movement()
+        elif self.state == self.RESTART_STATE:
+            self.restart_update()
 
     def movement(self):
         self.rect.x += self.speed * self.dx
@@ -41,11 +55,26 @@ class Ball(pygame.sprite.Sprite):
         self.dy = -sin(angle)
 
     def collision_with_paddle(self, player_rect: pygame.rect.Rect):
-        if player_rect.left <= self.rect.right < player_rect.left + 10:
-            self.randomize_angle(20, 30, -1)
-        elif player_rect.right >= self.rect.left > player_rect.right - 10:
-            self.randomize_angle(20, 30, 1)
-        elif player_rect.left + 10 <= self.rect.centerx < player_rect.centerx:
-            self.randomize_angle(35, 45, -1)
-        elif player_rect.right - 10 >= self.rect.centerx >= player_rect.centerx:
-            self.randomize_angle(35, 45, 1)
+        self.speed += self.speed_increment
+
+        if abs(player_rect.top - self.rect.bottom) < 10:
+            if player_rect.left <= self.rect.right < player_rect.left + 10:
+                self.randomize_angle(20, 30, -1)
+            elif player_rect.right >= self.rect.left > player_rect.right - 10:
+                self.randomize_angle(20, 30, 1)
+            elif player_rect.left + 10 <= self.rect.centerx < player_rect.centerx:
+                self.randomize_angle(35, 45, -1)
+            elif player_rect.right - 10 >= self.rect.centerx >= player_rect.centerx:
+                self.randomize_angle(35, 45, 1)
+
+    def restart_update(self):
+        self.restart_frames += 1
+        if self.restart_frames == self.MAX_RESTART_FRAMES:
+            self.restart_frames = 0
+            self.state = self.MOVE_STATE
+
+    def reset_ball(self):
+        self.rect.x = randint(200, 600)
+        self.rect.y = 400
+        self.speed = self.MIN_SPEED
+        self.state = self.RESTART_STATE
