@@ -2,7 +2,7 @@ import sys
 
 from model.Paddle import Paddle
 from model.Ball import Ball
-from model.Brick import Brick
+from model.brick_in_the_wall import Brick
 from control.constants import *
 import pygame
 from pygame.locals import *
@@ -57,20 +57,24 @@ def game():
     ball.rect.y = 350
 
     # Bricks
+    bricks = pygame.sprite.bricks
     for i in range(7):
         brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
         brick.rect.x = 60 + i * 100
         brick.rect.y = 60
+        bricks.(brick)
         sprites.add(brick)
     for i in range(7):
         brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
         brick.rect.x = 5 + i * 100
         brick.rect.y = 100
+        bricks.(brick)
         sprites.add(brick)
     for i in range(7):
         brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
         brick.rect.x = 60 + i * 100
         brick.rect.y = 140
+        bricks.(brick)
         sprites.add(brick)
 
     sprites.add(paddle)
