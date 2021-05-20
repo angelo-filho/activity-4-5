@@ -47,7 +47,7 @@ def game():
     sprites = pygame.sprite.Group()
 
     # Paddle
-    paddle = Paddle(COLOR_PADDLE, 100, 30)
+    paddle = Paddle(COLOR_PADDLE, 100, 20)
     paddle.rect.x = 350
     paddle.rect.y = 640
 
