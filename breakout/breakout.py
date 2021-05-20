@@ -2,7 +2,7 @@ import sys
 
 from model.Paddle import Paddle
 from model.Ball import Ball
-from model.brick_in_the_wall import Brick
+from model.Brick import Brick
 from control.constants import *
 import pygame
 from pygame.locals import *
@@ -56,8 +56,11 @@ def game():
     ball.rect.x = 300
     ball.rect.y = 350
 
+    sprites.add(ball)
+    sprites.add(paddle)
+
     # Bricks
-    bricks = pygame.sprite.bricks
+    bricks = pygame.sprite.Group()
     for i in range(7):
         brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
         brick.rect.x = 60 + i * 100
@@ -77,9 +80,6 @@ def game():
         bricks.add(brick)
         sprites.add(brick)
 
-    sprites.add(paddle)
-    sprites.add(ball)
-
     while run:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -96,6 +96,12 @@ def game():
 
         if ball.rect.bottom >= HEIGHT + 30:
             ball.state = ball.RESTART_STATE
+
+        bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
+        for brick in bricks_collided:
+            if ball.can_collide:
+                ball.collision_with_brick()
+                brick.kill()
 
         if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
