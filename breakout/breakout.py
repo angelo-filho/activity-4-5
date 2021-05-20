@@ -1,5 +1,5 @@
-from Classes.Paddle import Paddle
-from Classes.Ball import Ball
+from model.Paddle import Paddle
+from model.Ball import Ball
 import pygame
 
 pygame.init()
@@ -10,19 +10,25 @@ screen = pygame.display.set_mode(size)
 background_colour = (0, 0, 0)
 screen.fill(background_colour)
 pygame.display.set_caption('BREAKOUT')
+icon = pygame.image.load('assets/atari.png')
+pygame.display.set_icon(icon)
+
 run = True
 clock = pygame.time.Clock()
 FPS = 60
-color = 61, 164, 163
+COLOR_PADDLE = 61, 164, 163
+COLOR_BALL = 255, 255, 255
+
 sprites = pygame.sprite.Group()
 
 # Paddle
-paddle = Paddle(color, 100, 20)
+paddle = Paddle(COLOR_PADDLE, 100, 30)
 paddle.rect.x = 350
 paddle.rect.y = 640
 
+
 # Ball
-ball = Ball(color, 20, 20)
+ball = Ball(COLOR_BALL, 20, 20)
 ball.rect.x = 300
 ball.rect.y = 350
 
@@ -36,9 +42,9 @@ while run:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        paddle.move_left()
+        paddle.move_left(3)
     if keys[pygame.K_RIGHT]:
-        paddle.move_right()
+        paddle.move_right(3)
 
     sprites.update()
 
