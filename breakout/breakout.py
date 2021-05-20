@@ -52,11 +52,6 @@ def game():
     paddle.rect.y = 640
 
     # Ball
-    ball = Ball(COLOR_BALL, 20, 20)
-    ball.rect.x = 300
-    ball.rect.y = 350
-
-    # Ball
     ball = Ball(COLOR_BALL, 15, 15)
     ball.rect.x = 300
     ball.rect.y = 350
