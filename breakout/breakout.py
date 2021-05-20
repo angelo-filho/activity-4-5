@@ -47,17 +47,39 @@ def game():
     sprites = pygame.sprite.Group()
 
     # Paddle
-    paddle = Paddle(COLOR_PADDLE, 100, 20)
+    paddle = Paddle(COLOR_PADDLE, 100, 30)
     paddle.rect.x = 350
     paddle.rect.y = 640
+
+    # Ball
+    ball = Ball(COLOR_BALL, 20, 20)
+    ball.rect.x = 300
+    ball.rect.y = 350
 
     # Ball
     ball = Ball(COLOR_BALL, 15, 15)
     ball.rect.x = 300
     ball.rect.y = 350
 
-    sprites.add(ball)
+    # Bricks
+    for i in range(7):
+       brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
+       brick.rect.x = 60 + i * 100
+       brick.rect.y = 60
+       sprites.add(brick)
+    for i in range(7):
+        brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
+        brick.rect.x = 5 + i * 100
+        brick.rect.y = 100
+        sprites.add(brick)
+    for i in range(7):
+        brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
+        brick.rect.x = 60 + i * 100
+        brick.rect.y = 140
+        sprites.add(brick)
+
     sprites.add(paddle)
+    sprites.add(ball)
 
     while run:
         for event in pygame.event.get():
