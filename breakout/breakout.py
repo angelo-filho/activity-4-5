@@ -47,22 +47,17 @@ def game():
     sprites = pygame.sprite.Group()
 
     # Paddle
-    paddle = Paddle(COLOR_PADDLE, 100, 30)
+    paddle = Paddle(COLOR_PADDLE, 100, 20)
     paddle.rect.x = 350
     paddle.rect.y = 640
-
-    # Ball
-    ball = Ball(COLOR_BALL, 20, 20)
-    ball.rect.x = 300
-    ball.rect.y = 350
 
     # Ball
     ball = Ball(COLOR_BALL, 15, 15)
     ball.rect.x = 300
     ball.rect.y = 350
 
-    sprites.add(paddle)
     sprites.add(ball)
+    sprites.add(paddle)
 
     while run:
         for event in pygame.event.get():
@@ -79,7 +74,7 @@ def game():
         sprites.update()
 
         if ball.rect.bottom >= HEIGHT + 30:
-            ball.reset_ball()
+            ball.state = ball.RESTART_STATE
 
         if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)

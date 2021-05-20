@@ -70,6 +70,7 @@ class Ball(pygame.sprite.Sprite):
         self.restart_frames += 1
         if self.restart_frames == self.MAX_RESTART_FRAMES:
             self.restart_frames = 0
+            self.reset_ball()
             self.state = self.MOVE_STATE
 
     def reset_ball(self):
@@ -77,4 +78,3 @@ class Ball(pygame.sprite.Sprite):
         self.rect.y = 350
         self.randomize_angle(25, 45, choice([1, -1]), 1)
         self.speed = self.MIN_SPEED
-        self.state = self.RESTART_STATE
