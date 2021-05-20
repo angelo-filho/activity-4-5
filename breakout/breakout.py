@@ -42,9 +42,9 @@ while run:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        paddle.move_left(3)
+        paddle.move_left()
     if keys[pygame.K_RIGHT]:
-        paddle.move_right(3)
+        paddle.move_right()
 
     sprites.update()
 
