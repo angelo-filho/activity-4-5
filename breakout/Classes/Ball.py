@@ -1,5 +1,5 @@
 import pygame
-from random import randint
+from random import randint, choice
 from math import cos, sin, radians
 
 BLACK = (0, 0, 0)
@@ -48,11 +48,11 @@ class Ball(pygame.sprite.Sprite):
         elif self.rect.top <= 0 and self.dy < 0:
             self.dy *= -1
 
-    def randomize_angle(self, a, b, x_direction):
+    def randomize_angle(self, a, b, x_direction, y_direction=-1):
         random_angle = randint(a, b)
         angle = radians(random_angle)
         self.dx = cos(angle) * x_direction
-        self.dy = -sin(angle)
+        self.dy = sin(angle) * y_direction
 
     def collision_with_paddle(self, player_rect: pygame.rect.Rect):
         self.speed += self.speed_increment
@@ -61,11 +61,9 @@ class Ball(pygame.sprite.Sprite):
             self.randomize_angle(20, 30, -1)
         elif player_rect.right >= self.rect.left > player_rect.right - 10:
             self.randomize_angle(20, 30, 1)
-        elif player_rect.left + 10 <= self.rect.centerx < player_rect.centerx and \
-                abs(player_rect.top - self.rect.bottom) < 10:
+        elif player_rect.left + 10 <= self.rect.centerx < player_rect.centerx:
             self.randomize_angle(35, 45, -1)
-        elif player_rect.right - 10 >= self.rect.centerx >= player_rect.centerx and \
-                abs(player_rect.top - self.rect.bottom) < 10:
+        elif player_rect.right - 10 >= self.rect.centerx >= player_rect.centerx:
             self.randomize_angle(35, 45, 1)
 
     def restart_update(self):
@@ -77,5 +75,6 @@ class Ball(pygame.sprite.Sprite):
     def reset_ball(self):
         self.rect.x = randint(200, 600)
         self.rect.y = 350
+        self.randomize_angle(25, 45, choice([1, -1]), 1)
         self.speed = self.MIN_SPEED
         self.state = self.RESTART_STATE

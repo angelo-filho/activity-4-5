@@ -13,7 +13,7 @@ class Paddle(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, color, [0, 0, width, height])
         self.rect = self.image.get_rect()
 
-        self.speed = 5
+        self.speed = 7
 
     def move_right(self):
         self.rect.x += self.speed
