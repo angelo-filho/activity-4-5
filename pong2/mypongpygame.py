@@ -189,7 +189,7 @@ class Ball(Entity):
 ball = Ball("assets/ball.png", 640, 360)
 
 # score
-score_1 = 2
+score_1 = 0
 score_2 = 0
 
 # game loop
