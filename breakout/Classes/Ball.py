@@ -13,11 +13,16 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, color, [0, 0, width, height])
         self.rect = self.image.get_rect()
 
+        self.speed = 5
         self.dx = 1
         self.dy = 1
 
     def update(self):
-        pass
+        self.movement()
+
+    def movement(self):
+        self.rect.x += self.speed * self.dx
+        self.rect.y += self.speed * self.dy
 
     def collision_ball_wall(self):
         if self.rect.left <= 0 or self.rect.right >= 800:

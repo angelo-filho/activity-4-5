@@ -15,15 +15,16 @@ clock = pygame.time.Clock()
 FPS = 60
 color = 61, 164, 163
 sprites = pygame.sprite.Group()
-paddle = Paddle(color, 100, 30)
+paddle = Paddle(color, 100, 20)
 paddle.rect.x = 350
 paddle.rect.y = 560
 
-ball = Ball(size[0] / 2, size[0] / 2, 20)
-ball.rect.x = 1
-ball.rect.y = 1
+ball = Ball(color, 20, 20)
+ball.rect.x = 300
+ball.rect.y = 300
 
 sprites.add(paddle)
+sprites.add(ball)
 
 
 def collision_ball_bricks():
@@ -39,16 +40,15 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    move_ball()
-
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        paddle.move_left(5)
+        paddle.move_left()
     if keys[pygame.K_RIGHT]:
-        paddle.move_right(5)
+        paddle.move_right()
+
+    sprites.update()
 
     screen.fill((0, 0, 0))
-    pygame.draw.rect(screen, (255, 255, 255), ball)
     sprites.draw(screen)
     pygame.display.flip()
     pygame.display.update()
