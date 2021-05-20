@@ -3,6 +3,7 @@ BLACK = (0, 0, 0)
 
 
 class Paddle(pygame.sprite.Sprite):
+
     def __init__(self, color, width, height):
         
         super().__init__()
@@ -13,14 +14,12 @@ class Paddle(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, color, [0, 0, width, height])
         self.rect = self.image.get_rect()
 
-        self.speed = 7
-
-    def move_right(self):
-        self.rect.x += self.speed
+    def move_right(self, pixels):
+        self.rect.x += pixels
         if self.rect.right >= 800:
             self.rect.x = 800 - self.rect.width
 
-    def move_left(self):
-        self.rect.x -= self.speed
+    def move_left(self, pixels):
+        self.rect.x -= pixels
         if self.rect.x <= 0:
             self.rect.x = 0
