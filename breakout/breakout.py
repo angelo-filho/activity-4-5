@@ -1,10 +1,13 @@
+import sys
+
 from model.Paddle import Paddle
 from model.Ball import Ball
+from control.constants import *
 import pygame
+from pygame.locals import *
 
 pygame.init()
-
-WIDTH, HEIGHT = 800, 680
+main_clock = pygame.time.Clock()
 size = (WIDTH, HEIGHT)
 screen = pygame.display.set_mode(size)
 background_colour = (0, 0, 0)
@@ -13,51 +16,81 @@ pygame.display.set_caption('BREAKOUT')
 icon = pygame.image.load('assets/atari.png')
 pygame.display.set_icon(icon)
 
-run = True
-clock = pygame.time.Clock()
-FPS = 60
-COLOR_PADDLE = 61, 164, 163
-COLOR_BALL = 255, 255, 255
 
-sprites = pygame.sprite.Group()
+def menu():
 
-# Paddle
-paddle = Paddle(COLOR_PADDLE, 100, 20)
-paddle.rect.x = 350
-paddle.rect.y = 640
+    click = False
+    while True:
+        pos_x, pos_y = pygame.mouse.get_pos()
+        button_game = pygame.Rect(50, 100, 255, 255)
+
+        if button_game.collidepoint((pos_x, pos_y)):
+            if click:
+                game()
+
+        pygame.draw.rect(screen, (255, 0, 0), button_game)
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+        pygame.display.update()
+        main_clock.tick(60)
 
 
-# Ball
-ball = Ball(COLOR_BALL, 15, 15)
-ball.rect.x = 300
-ball.rect.y = 350
+def game():
+    run = True
+    sprites = pygame.sprite.Group()
 
-sprites.add(paddle)
-sprites.add(ball)
+    # Paddle
+    paddle = Paddle(COLOR_PADDLE, 100, 30)
+    paddle.rect.x = 350
+    paddle.rect.y = 640
 
-while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+    # Ball
+    ball = Ball(COLOR_BALL, 20, 20)
+    ball.rect.x = 300
+    ball.rect.y = 350
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        paddle.move_left()
-    if keys[pygame.K_RIGHT]:
-        paddle.move_right()
+    # Ball
+    ball = Ball(COLOR_BALL, 15, 15)
+    ball.rect.x = 300
+    ball.rect.y = 350
 
-    sprites.update()
+    sprites.add(paddle)
+    sprites.add(ball)
 
-    if ball.rect.bottom >= HEIGHT + 30:
-        ball.reset_ball()
+    while run:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                run = False
 
-    if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
-        ball.collision_with_paddle(paddle.rect)
+        keys = pygame.key.get_pressed()
 
-    screen.fill((0, 0, 0))
-    sprites.draw(screen)
-    pygame.display.flip()
-    pygame.display.update()
-    clock.tick(FPS)
+        if keys[pygame.K_LEFT]:
+            paddle.move_left()
+        if keys[pygame.K_RIGHT]:
+            paddle.move_right()
 
-pygame.quit()
+        sprites.update()
+
+        if ball.rect.bottom >= HEIGHT + 30:
+            ball.reset_ball()
+
+        if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
+            ball.collision_with_paddle(paddle.rect)
+
+        screen.fill((0, 0, 0))
+        sprites.draw(screen)
+        pygame.display.flip()
+        pygame.display.update()
+        main_clock.tick(FPS)
+    pygame.quit()
+    sys.exit()
+
+
+menu()
