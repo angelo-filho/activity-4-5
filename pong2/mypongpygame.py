@@ -41,49 +41,153 @@ def draw_text(text, font, color, surface, x, y):
 bounce_sound_effect = pygame.mixer.Sound('assets/bounce.wav')
 scoring_sound_effect = pygame.mixer.Sound('assets/258020__kodack__arcade-bleep-sound.wav')
 
+
+class Entity:
+    def __init__(self, image, x_start, y_start):
+        self.image = pygame.image.load(image).convert()
+        self.rect = self.image.get_rect().move(x_start, y_start)
+        self.x_start = x_start
+        self.y_start = y_start
+
+    def restart_position(self):
+        self.rect.x, self.rect.y = self.x_start, self.y_start
+
+    def render(self):
+        screen.blit(self.image, [self.rect.x, self.rect.y])
+
+
+class Player1(Entity):
+    def __init__(self, image, x_start, y_start):
+        super().__init__(image, x_start, y_start)
+        self.speed = 5
+        self.move_up = False
+        self.move_down = False
+
+    def update(self):
+        self.movement()
+        self.collide_with_walls()
+
+    def movement(self):
+        # player 1 up movement
+        if self.move_up:
+            self.rect.y -= self.speed
+        else:
+            self.rect.y += 0
+
+        # player 1 down movement
+        if self.move_down:
+            self.rect.y += self.speed
+        else:
+            self.rect.y += 0
+
+    def collide_with_walls(self):
+        # player 1 collides with upper wall
+        if self.rect.y <= 0:
+            self.rect.y = 0
+
+        # player 1 collides with lower wall
+        elif self.rect.y >= 570:
+            self.rect.y = 570
+
+
 # player 1
-player_1_image = pygame.image.load("assets/player.png").convert()
-player_1 = player_1_image.get_rect().move(50, 300)
-player_1_move_up = False
-player_1_move_down = False
+player1 = Player1("assets/player.png", 50, 300)
+
+
+class Player2(Entity):
+    def __init__(self, image, x_start, y_start):
+        super().__init__(image, x_start, y_start)
+        self.speed = 3
+
+    def update(self):
+        self.movement()
+        self.collides_with_walls()
+
+    def movement(self):
+        # player 2 "Artificial Intelligence"
+        if self.rect.centery < ball.rect.y:
+            self.rect.y += self.speed
+        elif self.rect.centery > ball.rect.y:
+            self.rect.y -= self.speed
+
+    def collides_with_walls(self):
+        # player 2 "Artificial Intelligence" collides with up and down wall
+        if self.rect.y <= 0:
+            self.rect.y = 0
+        elif self.rect.y >= 570:
+            self.rect.y = 570
+
 
 # player 2 - robot
-player_2_image = pygame.image.load("assets/player.png").convert()
-player_2 = player_2_image.get_rect().move(1180, 300)
-player_2_speed = 3
+player2 = Player2("assets/player.png", 1180, 300)
+
+
+class Ball(Entity):
+    def __init__(self, image, x_start, y_start):
+        super(Ball, self).__init__(image, x_start, y_start)
+        self.dx = 1
+        self.dy = 1
+        self.speed = 5
+        self.MIN_SPEED = 5
+        self.MAX_SPEED = 9
+
+    def update(self):
+        self.movement()
+        self.collision_with_wall()
+
+        # ball collision with the player 1 's paddle
+        if self.rect.colliderect(player1.rect) and ball.dx < 0:
+            self.collision_with_paddles()
+            self.change_angle(player1.rect, 1)
+        # ball collision with the player 2 's paddle
+        elif ball.rect.colliderect(player2) and self.dx > 0:
+            self.collision_with_paddles()
+            self.change_angle(player2.rect, -1)
+
+    def movement(self):
+        # ball movement
+        self.rect.x += self.speed * self.dx
+        self.rect.y += self.speed * self.dy
+
+    def collision_with_paddles(self):
+        self.speed = min(self.speed + 0.2, self.MAX_SPEED)
+        self.randomize_angle()
+        bounce_sound_effect.play()
+
+    def collision_with_wall(self):
+        # ball collision with the wall
+        if self.rect.bottom > 720:
+            ball.dy *= -1
+            bounce_sound_effect.play()
+        elif ball.rect.top <= 0:
+            ball.dy *= -1
+            bounce_sound_effect.play()
+
+    def randomize_angle(self):
+        random_angle = randint(20, 45)
+        angle = radians(random_angle)
+        self.dx = cos(angle)
+        self.dy = sin(angle)
+
+    def change_angle(self, player_rect: pygame.rect.Rect, x_direction):
+        if player_rect.top <= self.rect.bottom <= player_rect.top + 60:
+            self.dy *= -1
+            self.dx *= x_direction
+        elif player_rect.bottom >= self.rect.top >= player_rect.bottom - 60:
+            self.dx *= x_direction
+        elif player_rect.centery - 15 < self.rect.centery < player_rect.centery + 15:
+            self.dy = 0
+            self.dx *= x_direction * 1.5
+
+    def restart_ball(self):
+        self.restart_position()
+        self.randomize_angle()
+        self.dy = randint(-1, 1)
+        self.speed = self.MIN_SPEED
 
 
 # ball
-ball_image = pygame.image.load("assets/ball.png").convert()
-ball = ball_image.get_rect().move(640, 360)
-ball_dx = 1
-ball_dy = 1
-ball_speed = 5
-MIN_BALL_SPEED = 5
-MAX_BALL_SPEED = 9
-
-
-def randomize_angle():
-    global ball_dx, ball_dy
-
-    random_angle = randint(20, 45)
-    angle = radians(random_angle)
-    ball_dx = cos(angle)
-    ball_dy = sin(angle)
-
-
-def change_angle(player_rect: pygame.rect.Rect, x_direction):
-    global ball_dx, ball_dy
-
-    if player_rect.top <= ball.bottom <= player_rect.top + 60:
-        ball_dy *= -1
-        ball_dx *= x_direction
-    elif player_rect.bottom >= ball.top >= player_rect.bottom - 60:
-        ball_dx *= x_direction
-    elif player_rect.centery - 15 < ball.centery < player_rect.centery + 15:
-        ball_dy = 0
-        ball_dx *= x_direction * 1.5
-
+ball = Ball("assets/ball.png", 640, 360)
 
 # score
 score_1 = 0
@@ -145,6 +249,17 @@ def main_menu():
         game_clock.tick(60)
 
 
+def restart_game():
+    global score_1, score_2
+    score_1 = 0
+    score_2 = 0
+    player1.restart_position()
+    player2.restart_position()
+    ball.restart_ball()
+
+
+press_r_frames = 0
+
 while game_loop:
 
     for event in pygame.event.get():
@@ -153,15 +268,18 @@ while game_loop:
 
         #  keystroke events
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                player_1_move_up = True
-            if event.key == pygame.K_DOWN:
-                player_1_move_down = True
+            if event.key == K_UP:
+                player1.move_up = True
+            if event.key == K_DOWN:
+                player1.move_down = True
+            if event.key == K_r and game_state == "Game" and (score_1 == SCORE_MAX or score_2 == SCORE_MAX):
+                restart_game()
+
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP:
-                player_1_move_up = False
-            if event.key == pygame.K_DOWN:
-                player_1_move_down = False
+            if event.key == K_UP:
+                player1.move_up = False
+            if event.key == K_DOWN:
+                player1.move_down = False
 
     if game_state == "Menu":
         main_menu()
@@ -171,93 +289,35 @@ while game_loop:
         # clear screen
         screen.fill(COLOR_BLACK)
 
-        # ball collision with the wall
-        if ball.bottom > 720:
-            ball_dy *= -1
-            bounce_sound_effect.play()
-        elif ball.top <= 0:
-            ball_dy *= -1
-            bounce_sound_effect.play()
-
-        # ball collision with the player 1 's paddle
-        if ball.colliderect(player_1) and ball_dx < 0:
-            ball_speed = min(ball_speed + 0.2, MAX_BALL_SPEED)
-            randomize_angle()
-            change_angle(player_1, 1)
-            bounce_sound_effect.play()
-
-        # ball collision with the player 2 's paddle
-        elif ball.colliderect(player_2) and ball_dx > 0:
-            ball_speed = min(ball_speed + 0.2, MAX_BALL_SPEED)
-            randomize_angle()
-            change_angle(player_2, -1)
-            bounce_sound_effect.play()
-
         # scoring points
-        if ball.x < -50:
-            ball.x = 640
-            ball.y = 360
-            ball_dy *= -1
-            ball_dx *= -1
+        if ball.rect.x < -50:
+            ball.restart_ball()
             score_2 += 1
-            ball_speed = MIN_BALL_SPEED
             scoring_sound_effect.play()
-        elif ball.x > 1320:
-            ball.x = 640
-            ball.y = 360
-            ball_dy *= -1
-            ball_dx *= -1
+        elif ball.rect.x > 1320:
+            ball.restart_ball()
             score_1 += 1
-            ball_speed = MIN_BALL_SPEED
             scoring_sound_effect.play()
 
-        # ball movement
-        ball.x += ball_speed * ball_dx
-        ball.y += ball_speed * ball_dy
-
-        # player 1 up movement
-        if player_1_move_up:
-            player_1.y -= 5
-        else:
-            player_1.y += 0
-
-        # player 1 down movement
-        if player_1_move_down:
-            player_1.y += 5
-        else:
-            player_1.y += 0
-
-        # player 1 collides with upper wall
-        if player_1.y <= 0:
-            player_1.y = 0
-
-        # player 1 collides with lower wall
-        elif player_1.y >= 570:
-            player_1.y = 570
-
-        # player 2 "Artificial Intelligence"
-        if player_2.centery < ball.y:
-            player_2.y += player_2_speed
-        elif player_2.centery > ball.y:
-            player_2.y -= player_2_speed
-
-        # player 2 "Artificial Intelligence" collides with up and down wall
-        if player_2.y <= 0:
-            player_2.y = 0
-        elif player_2.y >= 570:
-            player_2.y = 570
-
-        # update score hud
+        # update objects
         score_text = score_font.render(str(score_1) + ' x ' + str(score_2), True, COLOR_WHITE, COLOR_BLACK)
+        player1.update()
+        player2.update()
+        ball.update()
 
         # drawing objects
-        screen.blit(ball_image, (ball.x, ball.y))
-        screen.blit(player_1_image, (50, player_1.y))
-        screen.blit(player_2_image, (1180, player_2.y))
+        ball.render()
+        player1.render()
+        player2.render()
         screen.blit(score_text, score_text_rect)
     else:
         # drawing victory
         screen.fill(COLOR_BLACK)
+        press_r_frames += 1
+        if press_r_frames >= 30:
+            draw_text('PRESS R TO RESTART', score_font, COLOR_WHITE, screen, 260, 600)
+            if press_r_frames >= 60:
+                press_r_frames = 0
         screen.blit(score_text, score_text_rect)
         screen.blit(victory_text, victory_text_rect)
 
