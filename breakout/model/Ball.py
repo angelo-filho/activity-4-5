@@ -36,15 +36,23 @@ class Ball(pygame.sprite.Sprite):
 
     def update(self):
         if self.state == self.MOVE_STATE:
-            self.movement()
+            self.move_state_update()
         elif self.state == self.RESTART_STATE:
             self.restart_state_update()
+
+    def move_state_update(self):
+        self.movement()
+        self.collision_with_wall()
+
+        if not self.can_collide:
+            self.frames_can_collide += 1
+            if self.frames_can_collide == 30:
+                self.frames_can_collide = 0
+                self.can_collide = True
 
     def movement(self):
         self.rect.x += self.speed * self.dx
         self.rect.y += self.speed * self.dy
-
-        self.collision_with_wall()
 
     def collision_with_wall(self):
         if self.rect.left <= 0 or self.rect.right >= 800:
@@ -64,9 +72,8 @@ class Ball(pygame.sprite.Sprite):
         elif player_rect.right - 10 >= self.rect.centerx >= player_rect.centerx:
             self.randomize_angle(50, 60, 1)
 
-    def collision_with_brick(self, brick_rect: pygame.rect.Rect):
+    def collision_with_brick(self):
         self.speed = min(self.speed + self.speed_increment, self.MAX_SPEED)
-
         self.dy *= -1
 
     def randomize_angle(self, a, b, x_direction, y_direction=-1):
