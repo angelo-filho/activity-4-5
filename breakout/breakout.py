@@ -24,7 +24,7 @@ paddle.rect.y = 640
 # Ball
 ball = Ball(color, 20, 20)
 ball.rect.x = 300
-ball.rect.y = 400
+ball.rect.y = 350
 
 sprites.add(paddle)
 sprites.add(ball)

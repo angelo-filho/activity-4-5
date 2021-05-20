@@ -57,15 +57,16 @@ class Ball(pygame.sprite.Sprite):
     def collision_with_paddle(self, player_rect: pygame.rect.Rect):
         self.speed += self.speed_increment
 
-        if abs(player_rect.top - self.rect.bottom) < 10:
-            if player_rect.left <= self.rect.right < player_rect.left + 10:
-                self.randomize_angle(20, 30, -1)
-            elif player_rect.right >= self.rect.left > player_rect.right - 10:
-                self.randomize_angle(20, 30, 1)
-            elif player_rect.left + 10 <= self.rect.centerx < player_rect.centerx:
-                self.randomize_angle(35, 45, -1)
-            elif player_rect.right - 10 >= self.rect.centerx >= player_rect.centerx:
-                self.randomize_angle(35, 45, 1)
+        if player_rect.left <= self.rect.right < player_rect.left + 10:
+            self.randomize_angle(20, 30, -1)
+        elif player_rect.right >= self.rect.left > player_rect.right - 10:
+            self.randomize_angle(20, 30, 1)
+        elif player_rect.left + 10 <= self.rect.centerx < player_rect.centerx and \
+                abs(player_rect.top - self.rect.bottom) < 10:
+            self.randomize_angle(35, 45, -1)
+        elif player_rect.right - 10 >= self.rect.centerx >= player_rect.centerx and \
+                abs(player_rect.top - self.rect.bottom) < 10:
+            self.randomize_angle(35, 45, 1)
 
     def restart_update(self):
         self.restart_frames += 1
@@ -75,6 +76,6 @@ class Ball(pygame.sprite.Sprite):
 
     def reset_ball(self):
         self.rect.x = randint(200, 600)
-        self.rect.y = 400
+        self.rect.y = 350
         self.speed = self.MIN_SPEED
         self.state = self.RESTART_STATE
