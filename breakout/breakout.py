@@ -2,6 +2,7 @@ import sys
 
 from model.Paddle import Paddle
 from model.Ball import Ball
+from model.Brick import Brick
 from control.constants import *
 import pygame
 from pygame.locals import *
@@ -18,7 +19,6 @@ pygame.display.set_icon(icon)
 
 
 def menu():
-
     click = False
     while True:
         pos_x, pos_y = pygame.mouse.get_pos()
@@ -63,10 +63,10 @@ def game():
 
     # Bricks
     for i in range(7):
-       brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
-       brick.rect.x = 60 + i * 100
-       brick.rect.y = 60
-       sprites.add(brick)
+        brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
+        brick.rect.x = 60 + i * 100
+        brick.rect.y = 60
+        sprites.add(brick)
     for i in range(7):
         brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
         brick.rect.x = 5 + i * 100
