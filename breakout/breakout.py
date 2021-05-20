@@ -26,15 +26,6 @@ ball.rect.y = 300
 sprites.add(paddle)
 sprites.add(ball)
 
-
-def collision_ball_bricks():
-    pass
-
-
-def draw_bricks():
-    pass
-
-
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
