@@ -22,13 +22,13 @@ COLOR_BALL = 255, 255, 255
 sprites = pygame.sprite.Group()
 
 # Paddle
-paddle = Paddle(COLOR_PADDLE, 100, 30)
+paddle = Paddle(COLOR_PADDLE, 100, 20)
 paddle.rect.x = 350
 paddle.rect.y = 640
 
 
 # Ball
-ball = Ball(COLOR_BALL, 20, 20)
+ball = Ball(COLOR_BALL, 15, 15)
 ball.rect.x = 300
 ball.rect.y = 350
 
