@@ -60,7 +60,24 @@ def game():
     ball = Ball(COLOR_BALL, 15, 15)
     ball.rect.x = 300
     ball.rect.y = 350
-
+    
+    # Bricks
+    for i in range(7):
+       brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
+       brick.rect.x = 60 + i * 100
+       brick.rect.y = 60
+       sprites.add(brick)
+    for i in range(7):
+        brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
+        brick.rect.x = 5 + i * 100
+        brick.rect.y = 100
+        sprites.add(brick)
+    for i in range(7):
+        brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
+        brick.rect.x = 60 + i * 100
+        brick.rect.y = 140
+        sprites.add(brick)
+    
     sprites.add(paddle)
     sprites.add(ball)
 
