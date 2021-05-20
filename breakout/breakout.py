@@ -15,40 +15,40 @@ clock = pygame.time.Clock()
 FPS = 60
 color = 61, 164, 163
 sprites = pygame.sprite.Group()
-paddle = Paddle(color, 100, 30)
-paddle.rect.x = 350
-paddle.rect.y = 560
 
-ball = Ball(size[0] / 2, size[0] / 2, 20)
-ball.rect.x = 1
-ball.rect.y = 1
+# Paddle
+paddle = Paddle(color, 100, 20)
+paddle.rect.x = 350
+paddle.rect.y = 640
+
+# Ball
+ball = Ball(color, 20, 20)
+ball.rect.x = 300
+ball.rect.y = 350
 
 sprites.add(paddle)
-
-
-def collision_ball_bricks():
-    pass
-
-
-def draw_bricks():
-    pass
-
+sprites.add(ball)
 
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 
-    move_ball()
-
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        paddle.move_left(5)
+        paddle.move_left()
     if keys[pygame.K_RIGHT]:
-        paddle.move_right(5)
+        paddle.move_right()
+
+    sprites.update()
+
+    if ball.rect.bottom >= HEIGHT + 30:
+        ball.reset_ball()
+
+    if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
+        ball.collision_with_paddle(paddle.rect)
 
     screen.fill((0, 0, 0))
-    pygame.draw.rect(screen, (255, 255, 255), ball)
     sprites.draw(screen)
     pygame.display.flip()
     pygame.display.update()
