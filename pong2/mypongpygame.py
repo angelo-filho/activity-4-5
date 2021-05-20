@@ -19,15 +19,14 @@ pygame.display.set_caption("MyPong - PyGame Edition - 2021.01.30")
 
 # score text
 score_font = pygame.font.Font('assets/PressStart2P.ttf', 44)
-score_text = score_font.render('00 x 00', True, COLOR_WHITE, COLOR_BLACK)
+score_text = score_font.render('0 x 0', True, COLOR_WHITE, COLOR_BLACK)
 score_text_rect = score_text.get_rect()
-score_text_rect.center = (680, 50)
+score_text_rect.center = (650, 50)
 
 # victory text
 victory_font = pygame.font.Font('assets/PressStart2P.ttf', 100)
-victory_text = victory_font.render('VICTORY', True, COLOR_WHITE, COLOR_BLACK)
 victory_text_rect = score_text.get_rect()
-victory_text_rect.center = (450, 350)
+victory_text_rect.center = (420, 350)
 
 
 def draw_text(text, font, color, surface, x, y):
@@ -190,7 +189,7 @@ class Ball(Entity):
 ball = Ball("assets/ball.png", 640, 360)
 
 # score
-score_1 = 0
+score_1 = 2
 score_2 = 0
 
 # game loop
@@ -318,8 +317,12 @@ while game_loop:
             draw_text('PRESS R TO RESTART', score_font, COLOR_WHITE, screen, 260, 600)
             if press_r_frames >= 60:
                 press_r_frames = 0
+
+        if score_1 == SCORE_MAX:
+            draw_text("VICTORY", victory_font, COLOR_WHITE, screen, victory_text_rect.x, victory_text_rect.y)
+        else:
+            draw_text("DEFEAT", victory_font, COLOR_WHITE, screen, 360, victory_text_rect.y)
         screen.blit(score_text, score_text_rect)
-        screen.blit(victory_text, victory_text_rect)
 
     # update screen
     pygame.display.flip()
