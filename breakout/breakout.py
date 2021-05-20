@@ -1,4 +1,5 @@
 from Classes.Paddle import Paddle
+from Classes.Ball import Ball
 import pygame
 
 pygame.init()
@@ -18,22 +19,11 @@ paddle = Paddle(color, 100, 30)
 paddle.rect.x = 350
 paddle.rect.y = 560
 
+ball = Ball(size[0] / 2, size[0] / 2, 20)
+ball.rect.x = 1
+ball.rect.y = 1
 
 sprites.add(paddle)
-
-
-def move_ball():
-    ball.x += ball_dx
-    ball.y += ball_dy
-
-    collision_ball_wall()
-
-
-def collision_ball_wall():
-    global ball_dx
-
-    if ball.left <= 0 or ball.right >= size[0]:
-        ball_dx *= -1
 
 
 def collision_ball_bricks():
@@ -42,11 +32,6 @@ def collision_ball_bricks():
 
 def draw_bricks():
     pass
-
-
-ball = pygame.rect.Rect(size[0] / 2, size[0] / 2, 20, 20)
-ball_dx = 1
-ball_dy = 1
 
 
 while run:
@@ -68,4 +53,5 @@ while run:
     pygame.display.flip()
     pygame.display.update()
     clock.tick(FPS)
+
 pygame.quit()
