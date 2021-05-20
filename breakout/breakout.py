@@ -15,10 +15,13 @@ clock = pygame.time.Clock()
 FPS = 60
 color = 61, 164, 163
 sprites = pygame.sprite.Group()
+
+# Paddle
 paddle = Paddle(color, 100, 20)
 paddle.rect.x = 350
-paddle.rect.y = 560
+paddle.rect.y = 640
 
+# Ball
 ball = Ball(color, 20, 20)
 ball.rect.x = 300
 ball.rect.y = 300
@@ -38,6 +41,9 @@ while run:
         paddle.move_right()
 
     sprites.update()
+
+    if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
+        ball.collision_with_paddle(paddle.rect)
 
     screen.fill((0, 0, 0))
     sprites.draw(screen)
