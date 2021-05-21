@@ -1,5 +1,6 @@
 import sys
 
+from random import randint
 from model.Paddle import Paddle
 from model.Ball import Ball
 from model.Brick import Brick
