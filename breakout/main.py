@@ -29,11 +29,11 @@ def make_all_bricks(group_a, group_b):
         for j in range(BRICKS_TOTAL_COLS):
             brick = None
             if i in [0, 1]:
-                brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
+                brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT, True, 5)
             elif i in [2, 3]:
-                brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
+                brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT, True, 3)
             elif i in [4, 5]:
-                brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
+                brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT, True, 1)
             brick.rect.x = BRICKS_GAP*j + j*BRICK_WIDTH
             brick.rect.y = BRICKS_FIRST_ROW_Y + i*(BRICK_HEIGHT+BRICKS_GAP)
             group_a.add(brick)
@@ -110,8 +110,8 @@ def game():
         for brick in bricks_collided:
             if ball.can_collide:
                 ball.collision_with_brick()
+                score += brick.score
                 brick.kill()
-                score += 1
 
         if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
