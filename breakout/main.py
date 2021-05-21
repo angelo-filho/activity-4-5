@@ -19,9 +19,9 @@ pygame.display.set_icon(icon)
 
 # Score text
 score_font = pygame.font.Font('assets/PressStart2P.ttf', 40)
-score_text = score_font.render('000      000', True, COLOR_BALL, COLOR_BLACK)
+score_text = score_font.render('000   000', True, COLOR_BALL, COLOR_BLACK)
 score_text_rect = score_text.get_rect()
-score_text_rect.center = (370, 30)
+score_text_rect.center = (200, 30)
 
 
 def make_all_bricks(group_a, group_b):
