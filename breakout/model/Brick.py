@@ -4,7 +4,7 @@ from breakout.control.constants import COLOR_BLACK
 
 class Brick(pygame.sprite.Sprite):
 
-    def __init__(self, color, width, height, classic, score):
+    def __init__(self, color, width, height, score):
 
         super().__init__()
 
@@ -21,6 +21,3 @@ class Brick(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         self.score = score
-
-        if not classic:
-            pass
