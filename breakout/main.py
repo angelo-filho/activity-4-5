@@ -10,7 +10,7 @@ from pygame.locals import *
 pygame.init()
 main_clock = pygame.time.Clock()
 size = (WIDTH, HEIGHT)
-screen = pygame.display.set_mode(size)
+screen = pygame.display.set_mode(size, RESIZABLE)
 background_color = (0, 0, 0)
 screen.fill(background_color)
 pygame.display.set_caption('BREAKOUT')
@@ -79,7 +79,7 @@ def game():
     # Paddle
     paddle = Paddle(COLOR_PADDLE, 100, 20)
     paddle.rect.x = 350
-    paddle.rect.y = 640
+    paddle.rect.y = HEIGHT - 40
 
     # Ball
     ball = Ball(COLOR_BALL, 15, 15)
@@ -139,7 +139,3 @@ def game():
 
 
 menu()
-
-
-menu()
-

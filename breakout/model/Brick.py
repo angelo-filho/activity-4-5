@@ -1,6 +1,5 @@
 import pygame
-
-COLOR_BLACK = (0, 0, 0)
+from breakout.control.constants import COLOR_BLACK
 
 
 class Brick(pygame.sprite.Sprite):

@@ -1,8 +1,7 @@
 import pygame
 from random import randint, choice
 from math import cos, sin, radians
-
-BLACK = (0, 0, 0)
+from breakout.control.constants import WIDTH, COLOR_BLACK
 
 
 class Ball(pygame.sprite.Sprite):
@@ -10,8 +9,8 @@ class Ball(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
         super().__init__()
         self.image = pygame.Surface([width, height])
-        self.image.fill(BLACK)
-        self.image.set_colorkey(BLACK)
+        self.image.fill(COLOR_BLACK)
+        self.image.set_colorkey(COLOR_BLACK)
         pygame.draw.rect(self.image, color, [0, 0, width, height])
         self.rect = self.image.get_rect()
 
@@ -55,7 +54,7 @@ class Ball(pygame.sprite.Sprite):
         self.rect.y += self.speed * self.dy
 
     def collision_with_wall(self):
-        if self.rect.left <= 0 or self.rect.right >= 600:
+        if self.rect.left <= 0 or self.rect.right >= WIDTH:
             self.dx *= -1
         elif self.rect.top <= 0 and self.dy < 0:
             self.dy *= -1
