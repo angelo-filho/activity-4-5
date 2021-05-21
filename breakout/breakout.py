@@ -18,6 +18,27 @@ icon = pygame.image.load('assets/atari.png')
 pygame.display.set_icon(icon)
 
 
+def make_all_bricks(group_a, group_b):
+    for i in range(11):
+        brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
+        brick.rect.x = 20 + i * 70
+        brick.rect.y = 60
+        group_a.add(brick)
+        group_b.add(brick)
+    for i in range(11):
+        brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
+        brick.rect.x = 20 + i * 70
+        brick.rect.y = 100
+        group_a.add(brick)
+        group_b.add(brick)
+    for i in range(11):
+        brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
+        brick.rect.x = 20 + i * 70
+        brick.rect.y = 140
+        group_a.add(brick)
+        group_b.add(brick)
+
+
 def menu():
     click = False
     while True:
@@ -61,24 +82,7 @@ def game():
 
     # Bricks
     bricks = pygame.sprite.Group()
-    for i in range(11):
-        brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
-        brick.rect.x = 20 + i * 70
-        brick.rect.y = 60
-        bricks.add(brick)
-        sprites.add(brick)
-    for i in range(11):
-        brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
-        brick.rect.x = 20 + i * 70
-        brick.rect.y = 100
-        bricks.add(brick)
-        sprites.add(brick)
-    for i in range(11):
-        brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
-        brick.rect.x = 20 + i * 70
-        brick.rect.y = 140
-        bricks.add(brick)
-        sprites.add(brick)
+    make_all_bricks(bricks, sprites)
 
     while run:
         for event in pygame.event.get():

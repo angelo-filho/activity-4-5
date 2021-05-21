@@ -32,7 +32,7 @@ class Ball(pygame.sprite.Sprite):
 
         self.can_collide = True
         self.frames_can_collide = 0
-        self.MAX_FRAMES_CAN_COLLIDE = 15
+        self.MAX_FRAMES_CAN_COLLIDE = 16
 
     def update(self):
         if self.state == self.MOVE_STATE:
