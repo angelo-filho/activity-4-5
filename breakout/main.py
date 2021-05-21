@@ -1,14 +1,11 @@
 import sys
-import pygame
-
-from pygame.locals import *
-from random import randint
 
 from model.Paddle import Paddle
 from model.Ball import Ball
 from model.Brick import Brick
-from control.constants import *
-
+from breakout.control.constants import *
+import pygame
+from pygame.locals import *
 
 pygame.init()
 main_clock = pygame.time.Clock()
@@ -43,7 +40,7 @@ def make_all_bricks(group_a, group_b):
             group_b.add(brick)
 
 
-def menu():
+def screen_init():
     click = False
     while True:
         pos_x, pos_y = pygame.mouse.get_pos()
@@ -139,4 +136,4 @@ def classic_game():
     sys.exit()
 
 
-menu()
+screen_init()
