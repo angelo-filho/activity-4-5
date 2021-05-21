@@ -25,22 +25,22 @@ score_text_rect.center = (370, 30)
 
 
 def make_all_bricks(group_a, group_b):
-    for i in range(6):
+    for i in range(BRICKS_TOTAL_COLS):
         brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
-        brick.rect.x = 20 + i * 70
-        brick.rect.y = 60
+        brick.rect.x = BRICKS_GAP + i * 60
+        brick.rect.y = BRICKS_FIRST_ROW_Y
         group_a.add(brick)
         group_b.add(brick)
-    for i in range(6):
+    for i in range(BRICKS_TOTAL_COLS):
         brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
-        brick.rect.x = 20 + i * 70
-        brick.rect.y = 100
+        brick.rect.x = BRICKS_GAP + i * 60
+        brick.rect.y = BRICK_HEIGHT + BRICKS_GAP + BRICKS_FIRST_ROW_Y
         group_a.add(brick)
         group_b.add(brick)
-    for i in range(6):
+    for i in range(BRICKS_TOTAL_COLS):
         brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
-        brick.rect.x = 20 + i * 70
-        brick.rect.y = 140
+        brick.rect.x = BRICKS_GAP + i * 60
+        brick.rect.y = BRICK_HEIGHT * 2 + BRICKS_GAP * 2 + BRICKS_FIRST_ROW_Y
         group_a.add(brick)
         group_b.add(brick)
 
@@ -82,7 +82,7 @@ def game():
     paddle.rect.y = HEIGHT - 40
 
     # Ball
-    ball = Ball(COLOR_BALL, 15, 15)
+    ball = Ball(COLOR_BALL, 13, 13)
     ball.rect.x = 300
     ball.rect.y = 350
 
