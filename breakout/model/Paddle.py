@@ -9,7 +9,7 @@ class Paddle:
         self.speed = 12
 
         self.normal_width = width
-        self.short_width = width - 20
+        self.short_width = width - 30
 
     def move_right(self):
         self.rect.x += self.speed

@@ -51,7 +51,7 @@ def menu():
 
         if button_game.collidepoint((pos_x, pos_y)):
             if click:
-                remake()
+                classic_game()
 
         pygame.draw.rect(screen, (255, 0, 0), button_game)
 
@@ -67,75 +67,7 @@ def menu():
         main_clock.tick(60)
 
 
-def game():
-    run = True
-    sprites = pygame.sprite.Group()
-
-    lives = 3
-    score = 0
-
-    # Paddle
-    paddle = Paddle(350, HEIGHT - 40, 80, 20)
-    paddle.rect.x = 350
-    paddle.rect.y = HEIGHT - 40
-
-    # Ball
-    ball = Ball(COLOR_BALL, 13, 13)
-    ball.rect.x = -30
-    ball.rect.y = -30
-
-    sprites.add(ball)
-
-    # Bricks
-    bricks = pygame.sprite.Group()
-    make_all_bricks(bricks, sprites)
-
-    while run:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                run = False
-
-        keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_LEFT]:
-            paddle.move_left()
-        if keys[pygame.K_RIGHT]:
-            paddle.move_right()
-
-        sprites.update()
-
-        if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
-            lives -= 1
-            ball.state = ball.RESTART_STATE
-
-        bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
-        for brick in bricks_collided:
-            if ball.can_collide:
-                ball.collision_with_brick()
-                score += brick.score
-                brick.kill()
-
-        if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
-            ball.collision_with_paddle(paddle.rect)
-            if len(bricks) == 0:
-                make_all_bricks(bricks, sprites)
-
-        # Update score hud
-        hud_score = score_font.render("{:03d}".format(int(str(lives)))
-                                      + '        '
-                                      + "{:03d}".format(int(str(score))),
-                                      True, COLOR_BALL, COLOR_BLACK)
-        screen.fill((0, 0, 0))
-        sprites.draw(screen)
-        screen.blit(hud_score, score_text_rect)
-        pygame.display.flip()
-        pygame.display.update()
-        main_clock.tick(FPS)
-    pygame.quit()
-    sys.exit()
-
-
-def remake():
+def classic_game():
     run = True
     sprites = pygame.sprite.Group()
 
@@ -185,7 +117,7 @@ def remake():
         if ball.rect.colliderect(paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
 
-            if ball.touch_amount == 24:
+            if ball.touch_amount == 26:
                 paddle.lose_weight()
 
             if len(bricks) == 0:
