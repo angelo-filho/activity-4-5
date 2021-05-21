@@ -17,6 +17,11 @@ pygame.display.set_caption('BREAKOUT')
 icon = pygame.image.load('assets/atari.png')
 pygame.display.set_icon(icon)
 
+# Score text
+score_font = pygame.font.Font('assets/PressStart2P.ttf', 40)
+score_text = score_font.render('000      000', True, COLOR_BALL, background_color)
+score_text_rect = score_text.get_rect()
+score_text_rect.center = (370, 30)
 
 def make_all_bricks(group_a, group_b):
     for i in range(11):
@@ -110,8 +115,14 @@ def game():
         if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
 
+        # Update score hud
+        hud_score = score_font.render("{:03d}".format(int(str(lives)))
+                                      + '        '
+                                      + "{:03d}".format(int(str(score))),
+                                      True, COLOR_BALL, background_color)
         screen.fill((0, 0, 0))
         sprites.draw(screen)
+        screen.blit(hud_score, score_text_rect)
         pygame.display.flip()
         pygame.display.update()
         main_clock.tick(FPS)
