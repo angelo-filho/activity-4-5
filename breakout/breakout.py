@@ -11,8 +11,8 @@ pygame.init()
 main_clock = pygame.time.Clock()
 size = (WIDTH, HEIGHT)
 screen = pygame.display.set_mode(size)
-background_colour = (0, 0, 0)
-screen.fill(background_colour)
+background_color = (0, 0, 0)
+screen.fill(background_color)
 pygame.display.set_caption('BREAKOUT')
 icon = pygame.image.load('assets/atari.png')
 pygame.display.set_icon(icon)
@@ -22,6 +22,7 @@ score_font = pygame.font.Font('assets/PressStart2P.ttf', 40)
 score_text = score_font.render('000      000', True, COLOR_BALL, background_color)
 score_text_rect = score_text.get_rect()
 score_text_rect.center = (370, 30)
+
 
 def make_all_bricks(group_a, group_b):
     for i in range(11):
@@ -72,6 +73,9 @@ def game():
     run = True
     sprites = pygame.sprite.Group()
 
+    lives = 0
+    score = 0
+
     # Paddle
     paddle = Paddle(COLOR_PADDLE, 100, 20)
     paddle.rect.x = 350
@@ -111,6 +115,7 @@ def game():
             if ball.can_collide:
                 ball.collision_with_brick()
                 brick.kill()
+                score += 1
 
         if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
@@ -131,3 +136,7 @@ def game():
 
 
 menu()
+
+
+menu()
+
