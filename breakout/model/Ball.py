@@ -27,7 +27,7 @@ class Ball(pygame.sprite.Sprite):
 
         self.MOVE_STATE = 0
         self.RESTART_STATE = 1
-        self.state = self.MOVE_STATE
+        self.state = self.RESTART_STATE
 
         self.can_collide = True
         self.frames_can_collide = 0

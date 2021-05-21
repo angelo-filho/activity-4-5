@@ -78,8 +78,8 @@ def game():
 
     # Ball
     ball = Ball(COLOR_BALL, 13, 13)
-    ball.rect.x = 300
-    ball.rect.y = 350
+    ball.rect.x = -30
+    ball.rect.y = -30
 
     sprites.add(ball)
     sprites.add(paddle)
