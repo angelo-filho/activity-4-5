@@ -25,24 +25,19 @@ score_text_rect.center = (200, 30)
 
 
 def make_all_bricks(group_a, group_b):
-    for i in range(BRICKS_TOTAL_COLS):
-        brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
-        brick.rect.x = BRICKS_GAP + i * 60
-        brick.rect.y = BRICKS_FIRST_ROW_Y
-        group_a.add(brick)
-        group_b.add(brick)
-    for i in range(BRICKS_TOTAL_COLS):
-        brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
-        brick.rect.x = BRICKS_GAP + i * 60
-        brick.rect.y = BRICK_HEIGHT + BRICKS_GAP + BRICKS_FIRST_ROW_Y
-        group_a.add(brick)
-        group_b.add(brick)
-    for i in range(BRICKS_TOTAL_COLS):
-        brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
-        brick.rect.x = BRICKS_GAP + i * 60
-        brick.rect.y = BRICK_HEIGHT * 2 + BRICKS_GAP * 2 + BRICKS_FIRST_ROW_Y
-        group_a.add(brick)
-        group_b.add(brick)
+    for i in range(6):
+        for j in range(BRICKS_TOTAL_COLS):
+            brick = None
+            if i in [0, 1]:
+                brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
+            elif i in [2, 3]:
+                brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
+            elif i in [4, 5]:
+                brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
+            brick.rect.x = BRICKS_GAP*j + j*BRICK_WIDTH
+            brick.rect.y = BRICKS_FIRST_ROW_Y + i*(BRICK_HEIGHT+BRICKS_GAP)
+            group_a.add(brick)
+            group_b.add(brick)
 
 
 def menu():
