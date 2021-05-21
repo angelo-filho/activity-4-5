@@ -86,7 +86,7 @@ class Ball(pygame.sprite.Sprite):
             self.state = self.MOVE_STATE
 
     def reset_ball(self):
-        self.rect.x = randint(200, 600)
+        self.rect.x = randint(200, WIDTH - 70)
         self.rect.y = 350
-        self.randomize_angle(25, 45, choice([1, -1]), 1)
+        self.randomize_angle(35, 45, choice([1, -1]), 1)
         self.speed = self.MIN_SPEED
