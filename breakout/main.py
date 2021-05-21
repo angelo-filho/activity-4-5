@@ -1,11 +1,14 @@
 import sys
+import pygame
+
+from pygame.locals import *
+from random import randint
 
 from model.Paddle import Paddle
 from model.Ball import Ball
 from model.Brick import Brick
 from control.constants import *
-import pygame
-from pygame.locals import *
+
 
 pygame.init()
 main_clock = pygame.time.Clock()
@@ -34,8 +37,8 @@ def make_all_bricks(group_a, group_b):
                 brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT, True, 3)
             elif i in [4, 5]:
                 brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT, True, 1)
-            brick.rect.x = BRICKS_GAP*j + j*BRICK_WIDTH
-            brick.rect.y = BRICKS_FIRST_ROW_Y + i*(BRICK_HEIGHT+BRICKS_GAP)
+            brick.rect.x = BRICKS_GAP * j + j * BRICK_WIDTH
+            brick.rect.y = BRICKS_FIRST_ROW_Y + i * (BRICK_HEIGHT + BRICKS_GAP)
             group_a.add(brick)
             group_b.add(brick)
 
@@ -48,7 +51,7 @@ def menu():
 
         if button_game.collidepoint((pos_x, pos_y)):
             if click:
-                game()
+                remake()
 
         pygame.draw.rect(screen, (255, 0, 0), button_game)
 
@@ -72,7 +75,7 @@ def game():
     score = 0
 
     # Paddle
-    paddle = Paddle(COLOR_PADDLE, 80, 20)
+    paddle = Paddle(350, HEIGHT - 40, 80, 20)
     paddle.rect.x = 350
     paddle.rect.y = HEIGHT - 40
 
@@ -82,7 +85,6 @@ def game():
     ball.rect.y = -30
 
     sprites.add(ball)
-    sprites.add(paddle)
 
     # Bricks
     bricks = pygame.sprite.Group()
@@ -125,6 +127,73 @@ def game():
                                       True, COLOR_BALL, COLOR_BLACK)
         screen.fill((0, 0, 0))
         sprites.draw(screen)
+        screen.blit(hud_score, score_text_rect)
+        pygame.display.flip()
+        pygame.display.update()
+        main_clock.tick(FPS)
+    pygame.quit()
+    sys.exit()
+
+
+def remake():
+    run = True
+    sprites = pygame.sprite.Group()
+
+    lives = 3
+    score = 0
+
+    # Paddle
+    paddle = Paddle(350, HEIGHT - 40, 80, 20)
+
+    # Ball
+    ball = Ball(COLOR_BALL, 13, 13)
+    ball.rect.x = -30
+    ball.rect.y = -30
+
+    sprites.add(ball)
+
+    # Bricks
+    bricks = pygame.sprite.Group()
+    make_all_bricks(bricks, sprites)
+
+    while run:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                run = False
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_LEFT]:
+            paddle.move_left()
+        if keys[pygame.K_RIGHT]:
+            paddle.move_right()
+
+        sprites.update()
+
+        if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
+            lives -= 1
+            ball.state = ball.RESTART_STATE
+
+        bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
+        for brick in bricks_collided:
+            if ball.can_collide:
+                ball.collision_with_brick()
+                score += brick.score
+                brick.kill()
+
+        if ball.rect.colliderect(paddle) and ball.dy > 0:
+            ball.collision_with_paddle(paddle.rect)
+            if len(bricks) == 0:
+                make_all_bricks(bricks, sprites)
+
+        # Update score hud
+        hud_score = score_font.render("{:03d}".format(int(str(lives)))
+                                      + '        '
+                                      + "{:03d}".format(int(str(score))),
+                                      True, COLOR_BALL, COLOR_BLACK)
+        screen.fill((0, 0, 0))
+        sprites.draw(screen)
+        paddle.render(screen)
         screen.blit(hud_score, score_text_rect)
         pygame.display.flip()
         pygame.display.update()
