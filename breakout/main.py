@@ -32,11 +32,11 @@ def make_all_bricks(group_a, group_b):
         for j in range(BRICKS_TOTAL_COLS):
             brick = None
             if i in [0, 1]:
-                brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT, True, 5)
+                brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT, 5)
             elif i in [2, 3]:
-                brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT, True, 3)
+                brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT,  3)
             elif i in [4, 5]:
-                brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT, True, 1)
+                brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT, 1)
             brick.rect.x = BRICKS_GAP * j + j * BRICK_WIDTH
             brick.rect.y = BRICKS_FIRST_ROW_Y + i * (BRICK_HEIGHT + BRICKS_GAP)
             group_a.add(brick)
@@ -173,6 +173,7 @@ def remake():
         if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
             lives -= 1
             ball.state = ball.RESTART_STATE
+            paddle.recovery_weight()
 
         bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
         for brick in bricks_collided:
@@ -183,6 +184,10 @@ def remake():
 
         if ball.rect.colliderect(paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
+
+            if ball.touch_amount == 24:
+                paddle.lose_weight()
+
             if len(bricks) == 0:
                 make_all_bricks(bricks, sprites)
 
