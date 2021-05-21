@@ -18,7 +18,7 @@ class Paddle(pygame.sprite.Sprite):
 
     def move_right(self):
         self.rect.x += self.speed
-        if self.rect.right >= 800:
+        if self.rect.right >= 600:
             self.rect.x = 800 - self.rect.width
 
     def move_left(self):

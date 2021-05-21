@@ -19,7 +19,7 @@ pygame.display.set_icon(icon)
 
 # Score text
 score_font = pygame.font.Font('assets/PressStart2P.ttf', 40)
-score_text = score_font.render('000      000', True, COLOR_BALL, background_color)
+score_text = score_font.render('000      000', True, COLOR_BALL, COLOR_BLACK)
 score_text_rect = score_text.get_rect()
 score_text_rect.center = (370, 30)
 
@@ -73,7 +73,7 @@ def game():
     run = True
     sprites = pygame.sprite.Group()
 
-    lives = 0
+    lives = 3
     score = 0
 
     # Paddle
@@ -107,7 +107,8 @@ def game():
 
         sprites.update()
 
-        if ball.rect.bottom >= HEIGHT + 30:
+        if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
+            lives -= 1
             ball.state = ball.RESTART_STATE
 
         bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
@@ -117,6 +118,8 @@ def game():
                 brick.kill()
                 score += 1
 
+        # if len()
+
         if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
 
@@ -124,7 +127,7 @@ def game():
         hud_score = score_font.render("{:03d}".format(int(str(lives)))
                                       + '        '
                                       + "{:03d}".format(int(str(score))),
-                                      True, COLOR_BALL, background_color)
+                                      True, COLOR_BALL, COLOR_BLACK)
         screen.fill((0, 0, 0))
         sprites.draw(screen)
         screen.blit(hud_score, score_text_rect)
