@@ -1,18 +1,10 @@
 import pygame
-from breakout.control.constants import WIDTH, COLOR_BLACK
+from breakout.control.constants import WIDTH, COLOR_PADDLE
 
 
-class Paddle(pygame.sprite.Sprite):
-
-    def __init__(self, color, width, height):
-        
-        super().__init__()
-
-        self.image = pygame.Surface([width, height])
-        self.image.fill(COLOR_BLACK)
-        self.image.set_colorkey(COLOR_BLACK)
-        pygame.draw.rect(self.image, color, [0, 0, width, height])
-        self.rect = self.image.get_rect()
+class Paddle:
+    def __init__(self,x, y, width, height):
+        self.rect = pygame.Rect(x, y, width, height)
 
         self.speed = 12
 
@@ -25,3 +17,6 @@ class Paddle(pygame.sprite.Sprite):
         self.rect.x -= self.speed
         if self.rect.x <= 0:
             self.rect.x = 0
+
+    def render(self, screen):
+        pygame.draw.rect(screen, COLOR_PADDLE, self.rect)
