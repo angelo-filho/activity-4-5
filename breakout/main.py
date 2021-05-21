@@ -25,19 +25,19 @@ score_text_rect.center = (370, 30)
 
 
 def make_all_bricks(group_a, group_b):
-    for i in range(11):
+    for i in range(6):
         brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT)
         brick.rect.x = 20 + i * 70
         brick.rect.y = 60
         group_a.add(brick)
         group_b.add(brick)
-    for i in range(11):
+    for i in range(6):
         brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT)
         brick.rect.x = 20 + i * 70
         brick.rect.y = 100
         group_a.add(brick)
         group_b.add(brick)
-    for i in range(11):
+    for i in range(6):
         brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT)
         brick.rect.x = 20 + i * 70
         brick.rect.y = 140
@@ -77,7 +77,7 @@ def game():
     score = 0
 
     # Paddle
-    paddle = Paddle(COLOR_PADDLE, 100, 20)
+    paddle = Paddle(COLOR_PADDLE, 80, 20)
     paddle.rect.x = 350
     paddle.rect.y = HEIGHT - 40
 
@@ -118,10 +118,10 @@ def game():
                 brick.kill()
                 score += 1
 
-        # if len()
-
         if pygame.sprite.collide_mask(ball, paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
+            if len(bricks) == 0:
+                make_all_bricks(bricks, sprites)
 
         # Update score hud
         hud_score = score_font.render("{:03d}".format(int(str(lives)))
