@@ -2,7 +2,6 @@ import sys
 import pygame
 
 from pygame.locals import *
-from random import randint
 
 from model.Paddle import Paddle
 from model.Ball import Ball
@@ -133,7 +132,6 @@ def classic_game():
         paddle.render(screen)
         screen.blit(hud_score, score_text_rect)
         pygame.display.flip()
-        pygame.display.update()
         main_clock.tick(FPS)
     pygame.quit()
     sys.exit()
