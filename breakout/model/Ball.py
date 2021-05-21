@@ -54,7 +54,7 @@ class Ball(pygame.sprite.Sprite):
         self.rect.y += self.speed * self.dy
 
     def collision_with_wall(self):
-        if self.rect.left <= 0 or self.rect.right >= WIDTH:
+        if (self.rect.left <= 0 and self.dx < 0) or (self.rect.right >= WIDTH and self.dx > 0):
             self.dx *= -1
         elif self.rect.top <= 0 and self.dy < 0:
             self.dy *= -1
