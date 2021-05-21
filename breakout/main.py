@@ -1,9 +1,10 @@
 import sys
 
 from random import randint
-from model.Paddle import Paddle
+from model.Paddle import Paddle, PaddleRemake
 from model.Ball import Ball
 from model.Brick import Brick
+from breakout.model.Item import *
 from breakout.control.constants import *
 import pygame
 from pygame.locals import *
@@ -43,15 +44,18 @@ def make_all_bricks(group_a, group_b):
             group_a.add(brick)
             group_b.add(brick)
 
+def item_drop():
+    pass
+
 
 def screen_init():
     click = False
     while True:
         screen.fill(COLOR_BLACK)
         screen.blit(image, (0, 0))
-        font_start = font.render('Click to start', True, COLOR_BALL, COLOR_BLACK)
+        font_start = font.render('Click to start', True, COLOR_BALL)
         font_start_rect = font_start.get_rect()
-        font_start_rect.center = (0, 0)
+        font_start_rect.center = (300, 600)
         pos_x, pos_y = pygame.mouse.get_pos()
         if font_start_rect.collidepoint((pos_x, pos_y)):
             if click:
@@ -65,6 +69,9 @@ def screen_init():
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+
+        screen.blit(font_start, font_start_rect)
+
         pygame.display.update()
         main_clock.tick(60)
 
@@ -79,7 +86,7 @@ def menu():
         button_game = pygame.rect.Rect(100, 22, 50, 50)
         if button_game.collidepoint((pos_x, pos_y)):
             if click:
-                classic_game()
+                remake_game()
 
         pygame.draw.rect(screen, COLOR_ORANGE, button_game)
 
@@ -166,6 +173,96 @@ def classic_game():
 
             if len(bricks) == 0:
                 make_all_bricks(bricks, sprites)
+
+        # Update score hud
+        hud_score = score_font.render("{:03d}".format(int(str(lives)))
+                                      + '        '
+                                      + "{:03d}".format(int(str(score))),
+                                      True, COLOR_BALL, COLOR_BLACK)
+        screen.fill((0, 0, 0))
+        sprites.draw(screen)
+        paddle.render(screen)
+        screen.blit(hud_score, score_text_rect)
+        pygame.display.flip()
+        pygame.display.update()
+        main_clock.tick(FPS)
+    pygame.quit()
+    sys.exit()
+
+
+def remake_game():
+    run = True
+    sprites = pygame.sprite.Group()
+
+    lives = 3
+    score = 0
+
+    # Paddle
+    paddle = PaddleRemake(350, HEIGHT - 40, 80, 20)
+
+    # Ball
+    ball = Ball(COLOR_BALL, 13, 13)
+    ball.rect.x = -30
+    ball.rect.y = -30
+
+    sprites.add(ball)
+
+    # Bricks
+    bricks = pygame.sprite.Group()
+    make_all_bricks(bricks, sprites)
+
+    # Items
+    items = pygame.sprite.Group()
+
+    while run:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                run = False
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_LEFT]:
+            paddle.move_left()
+        if keys[pygame.K_RIGHT]:
+            paddle.move_right()
+
+        sprites.update()
+        paddle.update()
+
+        if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
+            lives -= 1
+            ball.state = ball.RESTART_STATE
+            paddle.recovery_weight()
+
+        bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
+        for brick in bricks_collided:
+            if ball.can_collide:
+                ball.collision_with_brick()
+                score += brick.score
+
+                # if randint(0, 100) < 20:
+                item = GrowPaddleItem(COLOR_BALL, 15, 15)
+                item.rect.center = brick.rect.center
+                sprites.add(item)
+                items.add(item)
+
+                brick.kill()
+
+
+        if ball.rect.colliderect(paddle) and ball.dy > 0:
+            ball.collision_with_paddle(paddle.rect)
+
+            if ball.touch_amount == 26:
+                paddle.lose_weight()
+
+            if len(bricks) == 0:
+                make_all_bricks(bricks, sprites)
+
+        for item in items:
+            if paddle.rect.colliderect(item.rect):
+                paddle.collision_with_items(item)
+                item.kill()
+
 
         # Update score hud
         hud_score = score_font.render("{:03d}".format(int(str(lives)))
