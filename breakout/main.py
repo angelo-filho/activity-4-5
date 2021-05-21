@@ -17,6 +17,9 @@ screen.fill(background_color)
 pygame.display.set_caption('BREAKOUT')
 icon = pygame.image.load('assets/atari.png')
 pygame.display.set_icon(icon)
+image = pygame.image.load('assets/screen_main.png')
+
+font = pygame.font.Font('assets/VT323-Regular.ttf', 25)
 
 # Score text
 score_font = pygame.font.Font('assets/PressStart2P.ttf', 40)
@@ -44,14 +47,15 @@ def make_all_bricks(group_a, group_b):
 def screen_init():
     click = False
     while True:
+        screen.fill(COLOR_BLACK)
+        screen.blit(image, (0, 0))
+        font_start = font.render('Click to start', True, COLOR_BALL, COLOR_BLACK)
+        font_start_rect = font_start.get_rect()
+        font_start_rect.center = (0, 0)
         pos_x, pos_y = pygame.mouse.get_pos()
-        button_game = pygame.Rect(50, 100, 255, 255)
-
-        if button_game.collidepoint((pos_x, pos_y)):
+        if font_start_rect.collidepoint((pos_x, pos_y)):
             if click:
-                classic_game()
-
-        pygame.draw.rect(screen, (255, 0, 0), button_game)
+                menu()
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -63,6 +67,48 @@ def screen_init():
                     click = True
         pygame.display.update()
         main_clock.tick(60)
+
+
+def menu():
+    click = False
+    image = pygame.image.load('assets/main_menu.png')
+    while True:
+        screen.fill(COLOR_BLACK)
+        screen.blit(image, (0, 0))
+        pos_x, pos_y = pygame.mouse.get_pos()
+        button_game = pygame.rect.Rect(100, 22, 50, 50)
+        if button_game.collidepoint((pos_x, pos_y)):
+            if click:
+                classic_game()
+
+        pygame.draw.rect(screen, COLOR_ORANGE, button_game)
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+        pygame.display.update()
+        main_clock.tick(60)
+
+
+def back():
+    pass
+
+
+def escape():
+    pass
+
+
+def victory():
+    pass
+
+
+def loser():
+    pass
 
 
 def classic_game():
