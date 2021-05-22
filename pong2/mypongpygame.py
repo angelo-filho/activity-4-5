@@ -28,6 +28,9 @@ victory_font = pygame.font.Font('assets/PressStart2P.ttf', 100)
 victory_text_rect = score_text.get_rect()
 victory_text_rect.center = (420, 350)
 
+# Pause text
+pause_text = pygame.font.SysFont('Consolas', 32).render('Pause', True, pygame.color.Color('White'))
+
 
 def draw_text(text, font, color, surface, x, y):
 
@@ -259,71 +262,79 @@ def restart_game():
 
 
 press_r_frames = 0
+RUNNING, PAUSE = 0, 1
+state = RUNNING 
 
 while game_loop:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_loop = False
-
-        #  keystroke events
         if event.type == pygame.KEYDOWN:
-            if event.key == K_UP:
-                player1.move_up = True
-            if event.key == K_DOWN:
-                player1.move_down = True
-            if event.key == K_r and game_state == "Game" and (score_1 == SCORE_MAX or score_2 == SCORE_MAX):
-                restart_game()
-
-        if event.type == pygame.KEYUP:
-            if event.key == K_UP:
-                player1.move_up = False
-            if event.key == K_DOWN:
-                player1.move_down = False
-
-    if game_state == "Menu":
-        main_menu()
-
-    # checking the victory condition
-    if score_1 < SCORE_MAX and score_2 < SCORE_MAX and game_state == "Game":
-        # clear screen
-        screen.fill(COLOR_BLACK)
-
-        # scoring points
-        if ball.rect.x < -50:
-            ball.restart_ball()
-            score_2 += 1
-            scoring_sound_effect.play()
-        elif ball.rect.x > 1320:
-            ball.restart_ball()
-            score_1 += 1
-            scoring_sound_effect.play()
-
-        # update objects
-        score_text = score_font.render(str(score_1) + ' x ' + str(score_2), True, COLOR_WHITE, COLOR_BLACK)
-        player1.update()
-        player2.update()
-        ball.update()
-
-        # drawing objects
-        ball.render()
-        player1.render()
-        player2.render()
-        screen.blit(score_text, score_text_rect)
+            if event.key == pygame.K_p: state = PAUSE
+            if event.key == pygame.K_s: state = RUNNING
     else:
-        # drawing victory
-        screen.fill(COLOR_BLACK)
-        press_r_frames += 1
-        if press_r_frames >= 30:
-            draw_text('PRESS R TO RESTART', score_font, COLOR_WHITE, screen, 260, 600)
-            if press_r_frames >= 60:
-                press_r_frames = 0
+        screen.fill((0, 0, 0))   
+        # keystroke events
+        if state == RUNNING:
+            #  keystroke events
+            if event.type == pygame.KEYDOWN:
+                if event.key == K_UP:
+                    player1.move_up = True
+                if event.key == K_DOWN:
+                    player1.move_down = True
+                if event.key == K_r and game_state == "Game" and (score_1 == SCORE_MAX or score_2 == SCORE_MAX):
+                    restart_game()
 
-        if score_1 == SCORE_MAX:
-            draw_text("VICTORY", victory_font, COLOR_WHITE, screen, victory_text_rect.x, victory_text_rect.y)
+            if event.type == pygame.KEYUP:
+                if event.key == K_UP:
+                    player1.move_up = False
+                if event.key == K_DOWN:
+                    player1.move_down = False
+
+        if game_state == "Menu":
+            main_menu()
+
+            # checking the victory condition
+        if score_1 < SCORE_MAX and score_2 < SCORE_MAX and game_state == "Game":
+            # clear screen
+            screen.fill(COLOR_BLACK)
+
+            # scoring points
+            if ball.rect.x < -50:
+                ball.restart_ball()
+                score_2 += 1
+                scoring_sound_effect.play()
+            elif ball.rect.x > 1320:
+                ball.restart_ball()
+                score_1 += 1
+                scoring_sound_effect.play()
+
+            # update objects
+            score_text = score_font.render(str(score_1) + ' x ' + str(score_2), True, COLOR_WHITE, COLOR_BLACK)
+            player1.update()
+            player2.update()
+            ball.update()
+
+            # drawing objects
+            ball.render()
+            player1.render()
+            player2.render()
+            screen.blit(score_text, score_text_rect)
         else:
-            draw_text("DEFEAT", victory_font, COLOR_WHITE, screen, 360, victory_text_rect.y)
-        screen.blit(score_text, score_text_rect)
+            # drawing victory
+            screen.fill(COLOR_BLACK)
+            press_r_frames += 1
+            if press_r_frames >= 30:
+                draw_text('PRESS R TO RESTART', score_font, COLOR_WHITE, screen, 260, 600)
+                if press_r_frames >= 60:
+                    press_r_frames = 0
+
+            if score_1 == SCORE_MAX:
+                draw_text("VICTORY", victory_font, COLOR_WHITE, screen, victory_text_rect.x, victory_text_rect.y)
+            else:
+                draw_text("DEFEAT", victory_font, COLOR_WHITE, screen, 360, victory_text_rect.y)
+            screen.blit(score_text, score_text_rect)                   
 
     # update screen
     pygame.display.flip()
