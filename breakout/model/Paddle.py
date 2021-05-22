@@ -63,7 +63,6 @@ class PaddleRemake(Paddle):
         self.rect.width = self.normal_width
 
     def huge_state_update(self):
-        print("Hi")
         self.rect.width = self.huge_width
 
     def collision_with_items(self, item):

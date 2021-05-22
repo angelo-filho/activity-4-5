@@ -20,7 +20,8 @@ icon = pygame.image.load('assets/atari.png')
 pygame.display.set_icon(icon)
 image = pygame.image.load('assets/screen_main.png')
 
-font = pygame.font.Font('assets/VT323-Regular.ttf', 25)
+# Screen init text
+font = pygame.font.Font('assets/VT323-Regular.ttf', 45)
 
 # Score text
 score_font = pygame.font.Font('assets/PressStart2P.ttf', 40)
@@ -43,6 +44,7 @@ def make_all_bricks(group_a, group_b):
             brick.rect.y = BRICKS_FIRST_ROW_Y + i * (BRICK_HEIGHT + BRICKS_GAP)
             group_a.add(brick)
             group_b.add(brick)
+
 
 def item_drop():
     pass
@@ -73,7 +75,7 @@ def screen_init():
         screen.blit(font_start, font_start_rect)
 
         pygame.display.update()
-        main_clock.tick(60)
+        main_clock.tick(FPS)
 
 
 def menu():
@@ -82,13 +84,30 @@ def menu():
     while True:
         screen.fill(COLOR_BLACK)
         screen.blit(image, (0, 0))
-        pos_x, pos_y = pygame.mouse.get_pos()
-        button_game = pygame.rect.Rect(100, 22, 50, 50)
-        if button_game.collidepoint((pos_x, pos_y)):
-            if click:
-                remake_game()
+        font_games = font.render('Games', True, COLOR_BALL)
+        font_credits = font.render('Credits', True, COLOR_BALL)
+        font_exit = font.render('Exit', True, COLOR_BALL)
+        font_games_rect = font_games.get_rect()
+        font_credits_rect = font_credits.get_rect()
+        font_exit_rect = font_exit.get_rect()
+        font_games_rect.center = (300, 350)
+        font_credits_rect.center = (300, 400)
+        font_exit_rect.center = (300, 450)
 
-        pygame.draw.rect(screen, COLOR_ORANGE, button_game)
+        pos_x, pos_y = pygame.mouse.get_pos()
+
+        if font_games_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                games()
+
+        if font_credits_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                credits()
+
+        if font_exit_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                pygame.quit()
+                sys.exit()
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -98,32 +117,150 @@ def menu():
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+
+        screen.blit(font_games, font_games_rect)
+        screen.blit(font_credits, font_credits_rect)
+        screen.blit(font_exit, font_exit_rect)
+
         pygame.display.update()
-        main_clock.tick(60)
+        main_clock.tick(FPS)
+
+
+def games():
+    click = False
+    image = pygame.image.load('assets/screen_games.png')
+    while True:
+        screen.fill(COLOR_BLACK)
+        screen.blit(image, (0, 0))
+        font_classic_games = font.render('Classic', True, COLOR_BALL)
+        font_remake_game = font.render('Remake', True, COLOR_BALL)
+        font_back = font.render('back to menu', True, COLOR_BALL)
+        font_classic_games_rect = font_classic_games.get_rect()
+        font_remake_game_rect = font_remake_game.get_rect()
+        font_back_rect = font_back.get_rect()
+        font_classic_games_rect.center = (300, 350)
+        font_remake_game_rect.center = (300, 400)
+        font_back_rect.center = (300, 450)
+
+        pos_x, pos_y = pygame.mouse.get_pos()
+
+        if font_classic_games_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                classic_game()
+
+        if font_remake_game_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                remake_game()
+
+        if font_back_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                back()
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        screen.blit(font_classic_games, font_classic_games_rect)
+        screen.blit(font_remake_game, font_remake_game_rect)
+        screen.blit(font_back, font_back_rect)
+        pygame.display.update()
+        main_clock.tick(FPS)
+
+
+def try_again(number):
+    if number == 1:
+        classic_game()
+    else:
+        remake_game()
 
 
 def back():
-    pass
+    menu()
 
 
-def escape():
+def credits():
     pass
 
 
 def victory():
-    pass
+    click = False
+    image = pygame.image.load('assets/screen_winner.png')
+    while True:
+        screen.fill(COLOR_BLACK)
+        screen.blit(image, (0, 0))
+        font_winner = font.render('back to menu', True, COLOR_BALL)
+        font_winner_rect = font_winner.get_rect()
+        font_winner_rect.center = (300, 670)
+
+        pos_x, pos_y = pygame.mouse.get_pos()
+
+        if font_winner_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                back()
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        screen.blit(font_winner, font_winner_rect)
+        pygame.display.update()
+        main_clock.tick(FPS)
 
 
-def loser():
-    pass
+def loser(number):
+    click = False
+    image = pygame.image.load('assets/screen_loser.png')
+    while True:
+        screen.fill(COLOR_BLACK)
+        screen.blit(image, (0, 0))
+        font_loser = font.render('Try Again', True, COLOR_BALL)
+        font_back = font.render('back to menu', True, COLOR_BALL)
+        font_loser_rect = font_loser.get_rect()
+        font_loser_rect.center = (300, 400)
+        font_back_rect = font_back.get_rect()
+        font_back_rect.center = (300, 470)
+        pos_x, pos_y = pygame.mouse.get_pos()
+
+        if font_loser_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                try_again(number)
+
+        if font_back_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                back()
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        screen.blit(font_loser, font_loser_rect)
+        screen.blit(font_back, font_back_rect)
+        pygame.display.update()
+        main_clock.tick(FPS)
 
 
 def classic_game():
     run = True
     sprites = pygame.sprite.Group()
 
-    lives = 3
+    lives = 0
     score = 0
+    round = 0
 
     # Paddle
     paddle = Paddle(350, HEIGHT - 40, 80, 20)
@@ -154,7 +291,7 @@ def classic_game():
         sprites.update()
 
         if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
-            lives -= 1
+            lives += 1
             ball.state = ball.RESTART_STATE
             paddle.recovery_weight()
 
@@ -172,7 +309,14 @@ def classic_game():
                 paddle.lose_weight()
 
             if len(bricks) == 0:
+                round += 1
                 make_all_bricks(bricks, sprites)
+
+        if round == 1:
+            victory()
+
+        if lives == 4:
+            loser(1)
 
         # Update score hud
         hud_score = score_font.render("{:03d}".format(int(str(lives)))
@@ -194,7 +338,7 @@ def remake_game():
     run = True
     sprites = pygame.sprite.Group()
 
-    lives = 3
+    lives = 4
     score = 0
 
     # Paddle
@@ -248,7 +392,6 @@ def remake_game():
 
                 brick.kill()
 
-
         if ball.rect.colliderect(paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
 
@@ -258,11 +401,16 @@ def remake_game():
             if len(bricks) == 0:
                 make_all_bricks(bricks, sprites)
 
+        if round == 1:
+            victory()
+
+        if lives == 0:
+            loser(2)
+
         for item in items:
             if paddle.rect.colliderect(item.rect):
                 paddle.collision_with_items(item)
                 item.kill()
-
 
         # Update score hud
         hud_score = score_font.render("{:03d}".format(int(str(lives)))
