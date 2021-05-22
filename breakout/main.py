@@ -12,7 +12,7 @@ from pygame.locals import *
 pygame.init()
 main_clock = pygame.time.Clock()
 size = (WIDTH, HEIGHT)
-screen = pygame.display.set_mode(size, RESIZABLE)
+screen = pygame.display.set_mode(size)
 background_color = (0, 0, 0)
 screen.fill(background_color)
 pygame.display.set_caption('BREAKOUT')
@@ -180,7 +180,33 @@ def back():
 
 
 def credits():
-    pass
+    click = False
+    image = pygame.image.load('assets/screen_credits.png')
+    while True:
+        screen.fill(COLOR_BLACK)
+        screen.blit(image, (0, 0))
+        font_back = font.render('back to menu', True, COLOR_BALL)
+        font_back_rect = font_back.get_rect()
+        font_back_rect.center = (300, 670)
+
+        pos_x, pos_y = pygame.mouse.get_pos()
+
+        if font_back_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                back()
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        screen.blit(font_back, font_back_rect)
+        pygame.display.update()
+        main_clock.tick(FPS)
 
 
 def victory():
