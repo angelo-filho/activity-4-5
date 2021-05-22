@@ -417,7 +417,6 @@ def remake_game():
         bullets.update()
         paddle.update(bullets)
 
-        # Ball collisions
         if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
             paddle.life -= 1
             ball.state = ball.RESTART_STATE
@@ -452,26 +451,10 @@ def remake_game():
         if paddle.life == 0:
             loser(2)
 
-        # Player collision with items
         for item in items:
             if paddle.rect.colliderect(item.rect):
                 paddle.collision_with_items(item)
                 item.kill()
-
-        # Bullets collisions
-        for bullet in bullets:
-            bricks_collided = pygame.sprite.spritecollide(bullet, bricks, False)
-            for brick in bricks_collided:
-                score += brick.score
-
-                # if randint(0, 100) < 20:
-                item = LifeItem(COLOR_BALL, 15, 15)
-                item.rect.center = brick.rect.center
-                sprites.add(item)
-                items.add(item)
-
-                bullet.kill()
-                brick.kill()
 
         # Update score hud
         hud_score = score_font.render("{:03d}".format(int(str(paddle.life)))
