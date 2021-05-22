@@ -49,6 +49,26 @@ def make_all_bricks(group_a, group_b):
             group_b.add(brick)
 
 
+def make_random_item(brick):
+    random_number = randint(0, 600)
+
+    item = None
+
+    if random_number < 20:
+        item = LifeItem(COLOR_BALL, 15, 15)
+    elif random_number < 40:
+        item = GrowPaddleItem(COLOR_BALL, 15, 15)
+    elif random_number < 60:
+        item = GunItem(COLOR_BALL, 15, 15)
+
+    if item:
+        item.rect.center = brick.rect.center
+
+        return item
+
+    return None
+
+
 def screen_init():
     click = False
 
@@ -383,6 +403,7 @@ def remake_game():
     sprites = pygame.sprite.Group()
 
     score = 0
+    round = 0
 
     # Paddle
     paddle = PaddleRemake(350, HEIGHT - 40, 80, 20)
@@ -431,68 +452,70 @@ def remake_game():
                 ball.state = ball.RESTART_STATE
                 paddle.recovery_weight()
 
-            bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
+        bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
+        for brick in bricks_collided:
+            if ball.can_collide:
+                ball.collision_with_brick()
+
+                item = make_random_item(brick)
+
+                if item:
+                    sprites.add(item)
+                    items.add(item)
+
+                score += brick.score
+                brick.kill()
+
+        if ball.rect.colliderect(paddle) and ball.dy > 0:
+            ball.collision_with_paddle(paddle.rect)
+
+            if ball.touch_amount == 26:
+                paddle.lose_weight()
+
+            if len(bricks) == 0:
+                round += 1
+                make_all_bricks(bricks, sprites)
+
+        if len(bricks) == 0:
+            round += 1
+
+        if round == 1:
+            victory()
+
+        if paddle.life == 0:
+            loser(2)
+
+        # Player collision with items
+        for item in items:
+            if paddle.rect.colliderect(item.rect):
+                paddle.collision_with_items(item)
+                item.kill()
+
+        # Bullets collisions
+        for bullet in bullets:
+            bricks_collided = pygame.sprite.spritecollide(bullet, bricks, False)
             for brick in bricks_collided:
-                if ball.can_collide:
-                    ball.collision_with_brick()
-                    score += brick.score
+                item = make_random_item(brick)
 
-                    # if randint(0, 100) < 20:
-                    item = LifeItem(COLOR_BALL, 15, 15)
-                    item.rect.center = brick.rect.center
+                if item:
                     sprites.add(item)
                     items.add(item)
 
-                    brick.kill()
+                bullet.kill()
 
-            if ball.rect.colliderect(paddle) and ball.dy > 0:
-                ball.collision_with_paddle(paddle.rect)
+                score += brick.score
+                brick.kill()
 
-                if ball.touch_amount == 26:
-                    paddle.lose_weight()
-
-                if len(bricks) == 0:
-                    make_all_bricks(bricks, sprites)
-
-            if round == 1:
-                victory()
-
-            if paddle.life == 0:
-                loser(2)
-
-            # Player collision with items
-            for item in items:
-                if paddle.rect.colliderect(item.rect):
-                    paddle.collision_with_items(item)
-                    item.kill()
-
-            # Bullets collisions
-            for bullet in bullets:
-                bricks_collided = pygame.sprite.spritecollide(bullet, bricks, False)
-                for brick in bricks_collided:
-                    score += brick.score
-
-                    # if randint(0, 100) < 20:
-                    item = LifeItem(COLOR_BALL, 15, 15)
-                    item.rect.center = brick.rect.center
-                    sprites.add(item)
-                    items.add(item)
-
-                    bullet.kill()
-                    brick.kill()
-
-            # Update score hud
-            hud_score = score_font.render("{:03d}".format(int(str(paddle.life)))
-                                          + '        '
-                                          + "{:03d}".format(int(str(score))),
-                                          True, COLOR_BALL, COLOR_BLACK)
-            screen.fill((0, 0, 0))
-            sprites.draw(screen)
-            bullets.draw(screen)
-            paddle.render(screen)
-            screen.blit(hud_score, score_text_rect)
-        elif state == PAUSE:
-            screen.blit(pause_text, (250, 300))        
+        # Update score hud
+        hud_score = score_font.render("{:03d}".format(int(str(paddle.life)))
+                                      + '        '
+                                      + "{:03d}".format(int(str(score))),
+                                      True, COLOR_BALL, COLOR_BLACK)
+        screen.fill((0, 0, 0))
+        sprites.draw(screen)
+        bullets.draw(screen)
+        paddle.render(screen)
+        screen.blit(hud_score, score_text_rect)
         pygame.display.flip()
         pygame.display.update()
         main_clock.tick(FPS)

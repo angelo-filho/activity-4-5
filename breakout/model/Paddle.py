@@ -96,6 +96,8 @@ class PaddleRemake(Paddle):
 
             if type(item) == GrowPaddleItem:
                 self.current_state = self.HUGE_STATE
+            elif type(item) == GunItem:
+                self.current_state = self.SHOOTER_STATE
 
     def render(self, screen):
         super().render(screen)

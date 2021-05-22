@@ -28,3 +28,7 @@ class GrowPaddleItem(Item):
 
 class LifeItem(Item):
     pass
+
+
+class GunItem(Item):
+    pass
