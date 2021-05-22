@@ -36,16 +36,13 @@ def make_all_bricks(group_a, group_b):
             if i in [0, 1]:
                 brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT, 5)
             elif i in [2, 3]:
-                brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT,  3)
+                brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT, 3)
             elif i in [4, 5]:
                 brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT, 1)
             brick.rect.x = BRICKS_GAP * j + j * BRICK_WIDTH
             brick.rect.y = BRICKS_FIRST_ROW_Y + i * (BRICK_HEIGHT + BRICKS_GAP)
             group_a.add(brick)
             group_b.add(brick)
-
-def item_drop():
-    pass
 
 
 def screen_init():
@@ -248,7 +245,6 @@ def remake_game():
 
                 brick.kill()
 
-
         if ball.rect.colliderect(paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
 
@@ -262,7 +258,6 @@ def remake_game():
             if paddle.rect.colliderect(item.rect):
                 paddle.collision_with_items(item)
                 item.kill()
-
 
         # Update score hud
         hud_score = score_font.render("{:03d}".format(int(str(lives)))
