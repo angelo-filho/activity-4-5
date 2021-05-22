@@ -388,7 +388,6 @@ def remake_game():
 
                 brick.kill()
 
-
         if ball.rect.colliderect(paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
 
