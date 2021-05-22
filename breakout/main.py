@@ -12,7 +12,7 @@ from pygame.locals import *
 pygame.init()
 main_clock = pygame.time.Clock()
 size = (WIDTH, HEIGHT)
-screen = pygame.display.set_mode(size, RESIZABLE)
+screen = pygame.display.set_mode(size)
 background_color = (0, 0, 0)
 screen.fill(background_color)
 pygame.display.set_caption('BREAKOUT')
@@ -48,6 +48,9 @@ def make_all_bricks(group_a, group_b):
 
 def screen_init():
     click = False
+
+    click_start_frames = 0
+
     while True:
         screen.fill(COLOR_BLACK)
         screen.blit(image, (0, 0))
@@ -59,6 +62,8 @@ def screen_init():
             if click:
                 menu()
 
+        click = False
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -68,7 +73,13 @@ def screen_init():
                 if event.button == 1:
                     click = True
 
-        screen.blit(font_start, font_start_rect)
+        click_start_frames += 1
+
+        if click_start_frames < 30:
+            screen.blit(font_start, font_start_rect)
+
+        if click_start_frames == 60:
+            click_start_frames = 0
 
         pygame.display.update()
         main_clock.tick(FPS)
@@ -104,6 +115,8 @@ def menu():
             if click:
                 pygame.quit()
                 sys.exit()
+
+        click = False
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -152,6 +165,8 @@ def games():
             if click:
                 back()
 
+        click = False
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -199,6 +214,8 @@ def victory():
             if click:
                 back()
 
+        click = False
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -234,6 +251,8 @@ def loser(number):
         if font_back_rect.collidepoint((pos_x, pos_y)):
             if click:
                 back()
+
+        click = False
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -334,7 +353,6 @@ def remake_game():
     run = True
     sprites = pygame.sprite.Group()
 
-    lives = 4
     score = 0
 
     # Paddle
@@ -354,6 +372,9 @@ def remake_game():
     # Items
     items = pygame.sprite.Group()
 
+    # Bullets
+    bullets = pygame.sprite.Group()
+
     while run:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -367,10 +388,11 @@ def remake_game():
             paddle.move_right()
 
         sprites.update()
-        paddle.update()
+        bullets.update()
+        paddle.update(bullets)
 
         if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
-            lives -= 1
+            paddle.life -= 1
             ball.state = ball.RESTART_STATE
             paddle.recovery_weight()
 
@@ -381,7 +403,7 @@ def remake_game():
                 score += brick.score
 
                 # if randint(0, 100) < 20:
-                item = GrowPaddleItem(COLOR_BALL, 15, 15)
+                item = LifeItem(COLOR_BALL, 15, 15)
                 item.rect.center = brick.rect.center
                 sprites.add(item)
                 items.add(item)
@@ -400,7 +422,7 @@ def remake_game():
         if round == 1:
             victory()
 
-        if lives == 0:
+        if paddle.life == 0:
             loser(2)
 
         for item in items:
@@ -409,12 +431,13 @@ def remake_game():
                 item.kill()
 
         # Update score hud
-        hud_score = score_font.render("{:03d}".format(int(str(lives)))
+        hud_score = score_font.render("{:03d}".format(int(str(paddle.life)))
                                       + '        '
                                       + "{:03d}".format(int(str(score))),
                                       True, COLOR_BALL, COLOR_BLACK)
         screen.fill((0, 0, 0))
         sprites.draw(screen)
+        bullets.draw(screen)
         paddle.render(screen)
         screen.blit(hud_score, score_text_rect)
         pygame.display.flip()
