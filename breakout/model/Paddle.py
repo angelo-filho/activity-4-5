@@ -1,4 +1,5 @@
 import pygame
+from breakout.model.Gun import Gun
 from breakout.control.constants import WIDTH, COLOR_PADDLE
 from breakout.model.Item import *
 
@@ -40,13 +41,23 @@ class PaddleRemake(Paddle):
 
         self.NORMAL_STATE = 0
         self.HUGE_STATE = 1
+        self.SHOOTER_STATE = 2
         self.current_state = self.NORMAL_STATE
 
         self.frames_power_up = 0
         self.MAX_FRAMES_POWER_UP = 60 * 6
 
-    def update(self):
+        self.life = 3
 
+        self.guns_sprites = pygame.sprite.Group()
+
+        self.gun1 = Gun(COLOR_PADDLE, 10, 10)
+        self.gun2 = Gun(COLOR_PADDLE, 10, 10)
+
+        self.guns_sprites.add(self.gun1)
+        self.guns_sprites.add(self.gun2)
+
+    def update(self, bullets):
         if self.current_state == self.NORMAL_STATE:
             self.normal_state_update()
         else:
@@ -58,6 +69,8 @@ class PaddleRemake(Paddle):
 
             if self.current_state == self.HUGE_STATE:
                 self.huge_state_update()
+            elif self.current_state == self.SHOOTER_STATE:
+                self.shooter_state_update(bullets)
 
     def normal_state_update(self):
         self.rect.width = self.normal_width
@@ -65,7 +78,26 @@ class PaddleRemake(Paddle):
     def huge_state_update(self):
         self.rect.width = self.huge_width
 
+    def shooter_state_update(self, bullets):
+        self.gun1.rect.left = self.rect.left
+        self.gun1.rect.bottom = self.rect.top
+        self.gun2.rect.right = self.rect.right
+        self.gun2.rect.bottom = self.rect.top
+
+        self.gun1.fire(bullets)
+        self.gun2.fire(bullets)
+
     def collision_with_items(self, item):
-        self.frames_power_up = 0
-        if type(item) == GrowPaddleItem:
-            self.current_state = self.HUGE_STATE
+
+        if type(item) == LifeItem:
+            self.life += 1
+        else:
+            self.frames_power_up = 0
+
+            if type(item) == GrowPaddleItem:
+                self.current_state = self.HUGE_STATE
+
+    def render(self, screen):
+        super().render(screen)
+        if self.current_state == self.SHOOTER_STATE:
+            self.guns_sprites.draw(screen)
