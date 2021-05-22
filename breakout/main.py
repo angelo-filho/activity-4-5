@@ -46,10 +46,6 @@ def make_all_bricks(group_a, group_b):
             group_b.add(brick)
 
 
-def item_drop():
-    pass
-
-
 def screen_init():
     click = False
     while True:
@@ -391,6 +387,7 @@ def remake_game():
                 items.add(item)
 
                 brick.kill()
+
 
         if ball.rect.colliderect(paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
