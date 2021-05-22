@@ -24,3 +24,7 @@ class Item(pygame.sprite.Sprite):
 
 class GrowPaddleItem(Item):
     pass
+
+
+class LifeItem(Item):
+    pass
