@@ -23,6 +23,9 @@ image = pygame.image.load('assets/screen_main.png')
 # Screen init text
 font = pygame.font.Font('assets/VT323-Regular.ttf', 45)
 
+# Pause text
+pause_text = pygame.font.SysFont('Consolas', 32).render('Pause', True, pygame.color.Color('White'))
+
 # Score text
 score_font = pygame.font.Font('assets/PressStart2P.ttf', 40)
 score_text = score_font.render('000   000', True, COLOR_BALL, COLOR_BLACK)
