@@ -1,4 +1,5 @@
 import sys
+import os
 
 from random import randint
 from model.Paddle import Paddle, PaddleRemake
@@ -8,7 +9,6 @@ from breakout.model.Item import *
 from breakout.control.constants import *
 import pygame
 from pygame.locals import *
-
 
 # Screen Init
 pygame.init()
@@ -26,11 +26,10 @@ image = pygame.image.load('assets/screen_main.png')
 font = pygame.font.Font('assets/VT323-Regular.ttf', 45)
 font_controls = pygame.font.Font('assets/VT323-Regular.ttf', 35)
 
-
 # Pause text
-pause_text = pygame.font.Font('assets/VT323-Regular.ttf', 32)\
+pause_text = pygame.font.Font('assets/VT323-Regular.ttf', 32) \
     .render('Pause', True, pygame.color.Color('White'))
-back_game = pygame.font.Font('assets/VT323-Regular.ttf', 32)\
+back_game = pygame.font.Font('assets/VT323-Regular.ttf', 32) \
     .render('Press s to back', True, pygame.color.Color('White'))
 
 # Score text
@@ -38,6 +37,8 @@ score_font = pygame.font.Font('assets/PressStart2P.ttf', 40)
 score_text = score_font.render('000   000', True, COLOR_BALL, COLOR_BLACK)
 score_text_rect = score_text.get_rect()
 score_text_rect.center = (200, 30)
+
+background_music.play(-1)
 
 
 # Function make bricks
@@ -48,7 +49,7 @@ def make_all_bricks(group_a, group_b):
             if i in [0, 1]:
                 brick = Brick(COLOR_RED, BRICK_WIDTH, BRICK_HEIGHT, 5)
             elif i in [2, 3]:
-                brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT,  3)
+                brick = Brick(COLOR_ORANGE, BRICK_WIDTH, BRICK_HEIGHT, 3)
             elif i in [4, 5]:
                 brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT, 1)
             brick.rect.x = BRICKS_GAP * j + j * BRICK_WIDTH
@@ -64,11 +65,11 @@ def make_random_item(brick):
     item = None
 
     if random_number < 20:
-        item = LifeItem(COLOR_BALL, 15, 15)
+        item = LifeItem(COLOR_BALL, 32, 32)
     elif random_number < 40:
-        item = GrowPaddleItem(COLOR_BALL, 15, 15)
+        item = GrowPaddleItem(COLOR_BALL, 32, 32)
     elif random_number < 60:
-        item = GunItem(COLOR_BALL, 15, 15)
+        item = GunItem(COLOR_BALL, 32, 32)
 
     if item:
         item.rect.center = brick.rect.center
