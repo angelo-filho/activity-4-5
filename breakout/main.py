@@ -60,7 +60,7 @@ def make_all_bricks(group_a, group_b):
 
 # Function random item
 def make_random_item(brick):
-    random_number = randint(0, 600)
+    random_number = randint(50, 60)
 
     item = None
 
