@@ -547,6 +547,7 @@ def remake_game():
         for bullet in bullets:
             bricks_collided = pygame.sprite.spritecollide(bullet, bricks, False)
             for brick in bricks_collided:
+                sound_hit_brick.play()
                 item = make_random_item(brick)
 
                 if item:

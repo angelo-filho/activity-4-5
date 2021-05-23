@@ -1,3 +1,8 @@
+import pygame
+import os
+
+pygame.mixer.init()
+
 FPS = 60
 COLOR_BLACK = 0, 0, 0
 RUNNING = 0
@@ -19,3 +24,6 @@ BRICKS_GAP = 5
 BRICK_HEIGHT = 15
 BRICK_WIDTH = 50
 
+sound_hit_wall = pygame.mixer.Sound(os.path.join("assets", "sounds_wall.wav"))
+sound_hit_brick = pygame.mixer.Sound(os.path.join("assets", "sounds_brick.wav"))
+sound_hit_paddle = pygame.mixer.Sound(os.path.join("assets", "sounds_paddle.wav"))

@@ -1,7 +1,7 @@
 import pygame
 from random import randint, choice
 from math import cos, sin, radians
-from breakout.control.constants import WIDTH, COLOR_BLACK
+from breakout.control.constants import WIDTH, COLOR_BLACK, sound_hit_wall, sound_hit_brick, sound_hit_paddle
 
 
 class Ball(pygame.sprite.Sprite):
@@ -39,7 +39,7 @@ class Ball(pygame.sprite.Sprite):
 
     def move_state_update(self):
         self.movement()
-        self.collision_with_wall()
+        self.collision_with_walls()
 
         if not self.can_collide:
             self.frames_can_collide += 1
@@ -61,15 +61,18 @@ class Ball(pygame.sprite.Sprite):
         else:
             return 11
 
-    def collision_with_wall(self):
+    def collision_with_walls(self):
         if (self.rect.left <= 0 and self.dx < 0) or (self.rect.right >= WIDTH and self.dx > 0):
             self.dx *= -1
+            sound_hit_wall.play()
         elif self.rect.top <= 0 and self.dy < 0:
+            sound_hit_wall.play()
             self.dy *= -1
 
     def collision_with_paddle(self, player_rect: pygame.rect.Rect):
         self.touch_amount += 1
 
+        sound_hit_paddle.play()
         if player_rect.centery - self.rect.top >= 0:
             if self.rect.centerx < player_rect.centerx:
                 self.randomize_angle(35, 60, -1)
@@ -77,6 +80,7 @@ class Ball(pygame.sprite.Sprite):
                 self.randomize_angle(35, 60, 1)
 
     def collision_with_brick(self):
+        sound_hit_brick.play()
         self.touch_amount += 1
         self.dy *= -1
         self.can_collide = False
