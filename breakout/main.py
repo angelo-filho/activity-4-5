@@ -9,6 +9,8 @@ from breakout.control.constants import *
 import pygame
 from pygame.locals import *
 
+
+# Screen Init
 pygame.init()
 main_clock = pygame.time.Clock()
 size = (WIDTH, HEIGHT)
@@ -22,9 +24,14 @@ image = pygame.image.load('assets/screen_main.png')
 
 # Screen init text
 font = pygame.font.Font('assets/VT323-Regular.ttf', 45)
+font_controls = pygame.font.Font('assets/VT323-Regular.ttf', 35)
+
 
 # Pause text
-pause_text = pygame.font.SysFont('Consolas', 32).render('Pause', True, pygame.color.Color('White'))
+pause_text = pygame.font.Font('assets/VT323-Regular.ttf', 32)\
+    .render('Pause', True, pygame.color.Color('White'))
+back_game = pygame.font.Font('assets/VT323-Regular.ttf', 32)\
+    .render('Press s to back', True, pygame.color.Color('White'))
 
 # Score text
 score_font = pygame.font.Font('assets/PressStart2P.ttf', 40)
@@ -33,6 +40,7 @@ score_text_rect = score_text.get_rect()
 score_text_rect.center = (200, 30)
 
 
+# Function make bricks
 def make_all_bricks(group_a, group_b):
     for i in range(6):
         for j in range(BRICKS_TOTAL_COLS):
@@ -49,6 +57,7 @@ def make_all_bricks(group_a, group_b):
             group_b.add(brick)
 
 
+# Function random item
 def make_random_item(brick):
     random_number = randint(0, 600)
 
@@ -69,6 +78,7 @@ def make_random_item(brick):
     return None
 
 
+# Function screen  init
 def screen_init():
     click = False
 
@@ -108,6 +118,7 @@ def screen_init():
         main_clock.tick(FPS)
 
 
+# Function menu
 def menu():
     click = False
     image = pygame.image.load('assets/main_menu.png')
@@ -115,14 +126,17 @@ def menu():
         screen.fill(COLOR_BLACK)
         screen.blit(image, (0, 0))
         font_games = font.render('Games', True, COLOR_BALL)
+        font_controls = font.render('Controls', True, COLOR_BALL)
         font_credits = font.render('Credits', True, COLOR_BALL)
         font_exit = font.render('Exit', True, COLOR_BALL)
         font_games_rect = font_games.get_rect()
+        font_controls_rect = font_controls.get_rect()
         font_credits_rect = font_credits.get_rect()
         font_exit_rect = font_exit.get_rect()
         font_games_rect.center = (300, 350)
-        font_credits_rect.center = (300, 400)
-        font_exit_rect.center = (300, 450)
+        font_controls_rect.center = (300, 400)
+        font_credits_rect.center = (300, 450)
+        font_exit_rect.center = (300, 500)
 
         pos_x, pos_y = pygame.mouse.get_pos()
 
@@ -133,6 +147,10 @@ def menu():
         if font_credits_rect.collidepoint((pos_x, pos_y)):
             if click:
                 credits()
+
+        if font_controls_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                controls()
 
         if font_exit_rect.collidepoint((pos_x, pos_y)):
             if click:
@@ -151,13 +169,44 @@ def menu():
                     click = True
 
         screen.blit(font_games, font_games_rect)
+        screen.blit(font_controls, font_controls_rect)
         screen.blit(font_credits, font_credits_rect)
         screen.blit(font_exit, font_exit_rect)
-
         pygame.display.update()
         main_clock.tick(FPS)
 
 
+# Function controls
+def controls():
+    click = False
+    image = pygame.image.load('assets/screen_controls.png')
+    while True:
+        screen.fill(COLOR_BLACK)
+        screen.blit(image, (0, 0))
+        font_back = font_controls.render('back to menu', True, COLOR_BALL)
+        font_back_rect = font_back.get_rect()
+        font_back_rect.center = (300, 680)
+        pos_x, pos_y = pygame.mouse.get_pos()
+
+        if font_back_rect.collidepoint((pos_x, pos_y)):
+            if click:
+                back()
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        screen.blit(font_back, font_back_rect)
+        pygame.display.update()
+        main_clock.tick(FPS)
+
+
+# Function Games
 def games():
     click = False
     image = pygame.image.load('assets/screen_games.png')
@@ -206,6 +255,7 @@ def games():
         main_clock.tick(FPS)
 
 
+# Function try again
 def try_again(number):
     if number == 1:
         classic_game()
@@ -213,10 +263,12 @@ def try_again(number):
         remake_game()
 
 
+# Function back
 def back():
     menu()
 
 
+# Function Credits
 def credits():
     click = False
     image = pygame.image.load('assets/screen_credits.png')
@@ -247,6 +299,7 @@ def credits():
         main_clock.tick(FPS)
 
 
+# Function Victory
 def victory():
     click = False
     image = pygame.image.load('assets/screen_winner.png')
@@ -318,13 +371,13 @@ def loser(number):
         main_clock.tick(FPS)
 
 
+# Classic Game
 def classic_game():
     run = True
     sprites = pygame.sprite.Group()
-
-    lives = 0
-    score = 0
-    round = 0
+    lives = LIVES
+    score = SCORE
+    level = ROUND
 
     # Paddle
     paddle = Paddle(350, HEIGHT - 40, 80, 20)
@@ -373,7 +426,7 @@ def classic_game():
                 paddle.lose_weight()
 
             if len(bricks) == 0:
-                round += 1
+                level += 1
                 make_all_bricks(bricks, sprites)
 
         if round == 1:
@@ -398,12 +451,14 @@ def classic_game():
     sys.exit()
 
 
+# Remake game
 def remake_game():
     run = True
     sprites = pygame.sprite.Group()
 
-    score = 0
-    round = 0
+    score = SCORE
+    level = ROUND
+    state = RUNNING
 
     # Paddle
     paddle = PaddleRemake(350, HEIGHT - 40, 80, 20)
@@ -430,8 +485,10 @@ def remake_game():
             if event.type == QUIT:
                 run = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p: state = PAUSE
-                if event.key == pygame.K_s: state = RUNNING
+                if event.key == pygame.K_p:
+                    state = PAUSE
+                if event.key == pygame.K_s:
+                    state = RUNNING
         else:
             screen.fill((0, 0, 0))
         keys = pygame.key.get_pressed()
@@ -441,11 +498,9 @@ def remake_game():
                 paddle.move_left()
             if keys[pygame.K_RIGHT]:
                 paddle.move_right()
-
             sprites.update()
             bullets.update()
             paddle.update(bullets)
-
             # Ball collisions
             if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
                 paddle.life -= 1
@@ -473,13 +528,10 @@ def remake_game():
                 paddle.lose_weight()
 
             if len(bricks) == 0:
-                round += 1
+                level += 1
                 make_all_bricks(bricks, sprites)
 
-        if len(bricks) == 0:
-            round += 1
-
-        if round == 1:
+        if level == 1:
             victory()
 
         if paddle.life == 0:
@@ -505,7 +557,6 @@ def remake_game():
 
                 score += brick.score
                 brick.kill()
-
         # Update score hud
         hud_score = score_font.render("{:03d}".format(int(str(paddle.life)))
                                       + '        '
@@ -516,6 +567,9 @@ def remake_game():
         bullets.draw(screen)
         paddle.render(screen)
         screen.blit(hud_score, score_text_rect)
+        if state == PAUSE:
+            screen.blit(pause_text, (250, 350))
+            screen.blit(back_game, (250, 400))
         pygame.display.flip()
         pygame.display.update()
         main_clock.tick(FPS)
@@ -523,4 +577,5 @@ def remake_game():
     sys.exit()
 
 
+# Init
 screen_init()
