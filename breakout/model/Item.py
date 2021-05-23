@@ -1,3 +1,5 @@
+import os
+
 import pygame
 from breakout.control.constants import COLOR_BLACK
 from breakout.control.constants import HEIGHT
@@ -23,12 +25,18 @@ class Item(pygame.sprite.Sprite):
 
 
 class GrowPaddleItem(Item):
-    pass
+    def __init__(self, color, width, height):
+        super().__init__(color, width, height)
+        self.image = pygame.transform.scale2x(pygame.image.load(os.path.join("assets", "grow_item.png")))
 
 
 class LifeItem(Item):
-    pass
+    def __init__(self, color, width, height):
+        super().__init__(color, width, height)
+        self.image = pygame.transform.scale2x(pygame.image.load(os.path.join("assets", "life_item.png")))
 
 
 class GunItem(Item):
-    pass
+    def __init__(self, color, width, height):
+        super().__init__(color, width, height)
+        self.image = pygame.transform.scale2x(pygame.image.load(os.path.join("assets", "gun_item.png")))
