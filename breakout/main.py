@@ -427,8 +427,10 @@ def classic_game():
                 paddle.lose_weight()
 
             if len(bricks) == 0:
-                level += 1
                 make_all_bricks(bricks, sprites)
+
+        if len(bricks) == 0:
+            level += 1
 
         if round == 1:
             victory()
@@ -529,8 +531,10 @@ def remake_game():
                 paddle.lose_weight()
 
             if len(bricks) == 0:
-                level += 1
                 make_all_bricks(bricks, sprites)
+
+        if len(bricks) == 0:
+            level += 1
 
         if level == 1:
             victory()

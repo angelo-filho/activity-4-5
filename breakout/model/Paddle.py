@@ -79,6 +79,8 @@ class PaddleRemake(Paddle):
         self.rect.width = self.huge_width
 
     def shooter_state_update(self, bullets):
+        self.rect.width = self.normal_width
+
         self.gun1.rect.left = self.rect.left
         self.gun1.rect.bottom = self.rect.top
         self.gun2.rect.right = self.rect.right
