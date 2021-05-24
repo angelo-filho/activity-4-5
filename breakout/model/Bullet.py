@@ -1,3 +1,4 @@
+import pygame
 from breakout.control.constants import COLOR_BLACK
 
 
