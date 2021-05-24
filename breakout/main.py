@@ -273,10 +273,10 @@ def back():
 # Function Credits
 def credits():
     click = False
-    image = pygame.image.load('assets/screen_credits.png')
+    graphics = pygame.image.load('assets/screen_credits.png')
     while True:
         screen.fill(COLOR_BLACK)
-        screen.blit(image, (0, 0))
+        screen.blit(graphics, (0, 0))
         font_back = font.render('back to menu', True, COLOR_BALL)
         font_back_rect = font_back.get_rect()
         font_back_rect.center = (300, 670)
@@ -304,10 +304,10 @@ def credits():
 # Function Victory
 def victory():
     click = False
-    image = pygame.image.load('assets/screen_winner.png')
+    graphics = pygame.image.load('assets/screen_winner.png')
     while True:
         screen.fill(COLOR_BLACK)
-        screen.blit(image, (0, 0))
+        screen.blit(graphics, (0, 0))
         font_winner = font.render('back to menu', True, COLOR_BALL)
         font_winner_rect = font_winner.get_rect()
         font_winner_rect.center = (300, 670)
@@ -337,10 +337,10 @@ def victory():
 # Create Loser Screen
 def loser(number):
     click = False
-    image = pygame.image.load('assets/screen_loser.png')
+    graphics = pygame.image.load('assets/screen_loser.png')
     while True:
         screen.fill(COLOR_BLACK)
-        screen.blit(image, (0, 0))
+        screen.blit(graphics, (0, 0))
         font_loser = font.render('Try Again', True, COLOR_BALL)
         font_back = font.render('back to menu', True, COLOR_BALL)
         font_loser_rect = font_loser.get_rect()
@@ -592,3 +592,4 @@ def remake_game():
 
 # Init
 screen_init()
+
