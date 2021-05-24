@@ -423,7 +423,7 @@ def classic_game():
         if ball.rect.colliderect(paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
 
-            if ball.touch_amount == 26:
+            if ball.touch_amount == 15:
                 paddle.lose_weight()
 
             if len(bricks) == 0:
