@@ -226,6 +226,7 @@ def games():
 
         pos_x, pos_y = pygame.mouse.get_pos()
 
+
         if font_classic_games_rect.collidepoint((pos_x, pos_y)):
             if click:
                 classic_game()
