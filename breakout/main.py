@@ -157,7 +157,7 @@ def menu():
                 pygame.quit()
                 sys.exit()
 
-        click = False 
+        click = False
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -223,6 +223,7 @@ def games():
         font_back_rect.center = (300, 450)
 
         pos_x, pos_y = pygame.mouse.get_pos()
+
 
         if font_classic_games_rect.collidepoint((pos_x, pos_y)):
             if click:

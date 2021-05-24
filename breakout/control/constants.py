@@ -27,5 +27,6 @@ BRICK_WIDTH = 50
 sound_hit_wall = pygame.mixer.Sound(os.path.join("assets", "sounds_wall.wav"))
 sound_hit_brick = pygame.mixer.Sound(os.path.join("assets", "sounds_brick.wav"))
 sound_hit_paddle = pygame.mixer.Sound(os.path.join("assets", "sounds_paddle.wav"))
+sound_items = pygame.mixer.Sound(os.path.join("assets", "sound_items.wav"))
 background_music = pygame.mixer.Sound(os.path.join("assets", "background_music.wav"))
 background_music.set_volume(0.03)

@@ -1,6 +1,5 @@
-import pygame
 from breakout.model.Gun import Gun
-from breakout.control.constants import WIDTH, COLOR_PADDLE
+from breakout.control.constants import WIDTH, COLOR_PADDLE, sound_items
 from breakout.model.Item import *
 
 
@@ -90,6 +89,7 @@ class PaddleRemake(Paddle):
         self.gun2.fire(bullets)
 
     def collision_with_items(self, item):
+        sound_items.play()
 
         if type(item) == LifeItem:
             self.life += 1
