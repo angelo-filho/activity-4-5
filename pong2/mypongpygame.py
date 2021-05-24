@@ -93,7 +93,7 @@ player1 = Player1("assets/player.png", 50, 300)
 class Player2(Entity):
     def __init__(self, image, x_start, y_start):
         super().__init__(image, x_start, y_start)
-        self.speed = 3
+        self.speed = 4
 
     def update(self):
         self.movement()
@@ -101,9 +101,9 @@ class Player2(Entity):
 
     def movement(self):
         # player 2 "Artificial Intelligence"
-        if self.rect.centery < ball.rect.y:
+        if self.rect.centery + 30 < ball.rect.y:
             self.rect.y += self.speed
-        elif self.rect.centery > ball.rect.y:
+        elif self.rect.centery - 30 > ball.rect.y:
             self.rect.y -= self.speed
 
     def collides_with_walls(self):
@@ -131,7 +131,7 @@ class Ball(Entity):
         self.movement()
         self.collision_with_wall()
         # ball collision with the player 1 's paddle
-        if self.rect.colliderect(player1.rect) and ball.dx < 0:
+        if self.rect.colliderect(player1.rect) and self.dx < 0:
             self.collision_with_paddles()
             self.change_angle(player1.rect, 1)
         # ball collision with the player 2 's paddle
@@ -159,7 +159,7 @@ class Ball(Entity):
             bounce_sound_effect.play()
 
     def randomize_angle(self):
-        random_angle = randint(20, 45)
+        random_angle = randint(40, 50)
         angle = radians(random_angle)
         self.dx = cos(angle)
         self.dy = sin(angle)
@@ -170,7 +170,7 @@ class Ball(Entity):
             self.dx *= x_direction
         elif player_rect.bottom >= self.rect.top >= player_rect.bottom - 60:
             self.dx *= x_direction
-        elif player_rect.centery - 15 < self.rect.centery < player_rect.centery + 15:
+        elif player_rect.centery - 60 < self.rect.centery < player_rect.centery + 60:
             self.dy = 0
             self.dx *= x_direction * 1.5
 
