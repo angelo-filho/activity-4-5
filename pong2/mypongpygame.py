@@ -16,13 +16,13 @@ size = (1280, 720)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("MyPong - PyGame Edition - 2021.01.30")
 
-# score text
+# Score text
 score_font = pygame.font.Font('assets/PressStart2P.ttf', 44)
 score_text = score_font.render('0 x 0', True, COLOR_WHITE, COLOR_BLACK)
 score_text_rect = score_text.get_rect()
 score_text_rect.center = (650, 50)
 
-# victory text
+# Victory text
 victory_font = pygame.font.Font('assets/PressStart2P.ttf', 100)
 victory_text_rect = score_text.get_rect()
 victory_text_rect.center = (420, 350)
@@ -35,9 +35,10 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 
-# sound effects
+# Sound effects
 bounce_sound_effect = pygame.mixer.Sound('assets/bounce.wav')
-scoring_sound_effect = pygame.mixer.Sound('assets/258020__kodack__arcade-bleep-sound.wav')
+scoring_sound_effect = pygame.mixer.Sound(
+    'assets/258020__kodack__arcade-bleep-sound.wav')
 
 
 class Entity:
@@ -66,27 +67,27 @@ class Player1(Entity):
         self.collide_with_walls()
 
     def movement(self):
-        # player 1 up movement
+        # Player 1 up movement
         if self.move_up:
             self.rect.y -= self.speed
         else:
             self.rect.y += 0
-        # player 1 down movement
+        # Player 1 down movement
         if self.move_down:
             self.rect.y += self.speed
         else:
             self.rect.y += 0
 
     def collide_with_walls(self):
-        # player 1 collides with upper wall
+        # Player 1 collides with upper wall
         if self.rect.y <= 0:
             self.rect.y = 0
-        # player 1 collides with lower wall
+        # Player 1 collides with lower wall
         elif self.rect.y >= 570:
             self.rect.y = 570
 
 
-# player 1
+# Player 1
 player1 = Player1("assets/player.png", 50, 300)
 
 
@@ -100,21 +101,22 @@ class Player2(Entity):
         self.collides_with_walls()
 
     def movement(self):
-        # player 2 "Artificial Intelligence"
+        # Player 2 "Artificial Intelligence"
         if self.rect.centery + 30 < ball.rect.y:
             self.rect.y += self.speed
         elif self.rect.centery - 30 > ball.rect.y:
             self.rect.y -= self.speed
 
     def collides_with_walls(self):
-        # player 2 "Artificial Intelligence" collides with up and down wall
+        # Player 2 "Artificial Intelligence" collides with up and down
+        # wall
         if self.rect.y <= 0:
             self.rect.y = 0
         elif self.rect.y >= 570:
             self.rect.y = 570
 
 
-# player 2 - robot
+# Player 2 - robot
 player2 = Player2("assets/player.png", 1180, 300)
 
 
@@ -130,17 +132,17 @@ class Ball(Entity):
     def update(self):
         self.movement()
         self.collision_with_wall()
-        # ball collision with the player 1 's paddle
+        # Ball collision with the player 1 's paddle
         if self.rect.colliderect(player1.rect) and self.dx < 0:
             self.collision_with_paddles()
             self.change_angle(player1.rect, 1)
-        # ball collision with the player 2 's paddle
+        # Ball collision with the player 2 's paddle
         elif ball.rect.colliderect(player2) and self.dx > 0:
             self.collision_with_paddles()
             self.change_angle(player2.rect, -1)
 
     def movement(self):
-        # ball movement
+        # Ball movement
         self.rect.x += self.speed * self.dx
         self.rect.y += self.speed * self.dy
 
@@ -150,7 +152,7 @@ class Ball(Entity):
         bounce_sound_effect.play()
 
     def collision_with_wall(self):
-        # ball collision with the wall
+        # Ball collision with the wall
         if self.rect.bottom > 720:
             ball.dy *= -1
             bounce_sound_effect.play()
@@ -170,7 +172,8 @@ class Ball(Entity):
             self.dx *= x_direction
         elif player_rect.bottom >= self.rect.top >= player_rect.bottom - 60:
             self.dx *= x_direction
-        elif player_rect.centery - 60 < self.rect.centery < player_rect.centery + 60:
+        elif player_rect.centery - 60 < \
+                self.rect.centery < player_rect.centery + 60:
             self.dy = 0
             self.dx *= x_direction * 1.5
 
@@ -181,14 +184,14 @@ class Ball(Entity):
         self.speed = self.MIN_SPEED
 
 
-# ball
+# Ball
 ball = Ball("assets/ball.png", 640, 360)
 
-# score
+# Score
 score_1 = 0
 score_2 = 0
 
-# game loop
+# Game loop
 game_loop = True
 game_clock = pygame.time.Clock()
 game_state = "Menu"
@@ -202,14 +205,15 @@ def main_menu():
         screen.fill((0, 0, 0))
         mx, my = pygame.mouse.get_pos()
 
-        # text draw
-        draw_text("Pong", victory_font, (255, 255, 255), screen, screen.get_rect().centery + 80, 170)
+        # Text draw
+        draw_text("Pong", victory_font, (255, 255, 255),
+                  screen, screen.get_rect().centery + 80, 170)
 
-        # button
+        # Button
         button_1 = pygame.Rect(screen.get_rect().centery + 170, 370, 200, 60)
         button_2 = pygame.Rect(screen.get_rect().centery + 170, 470, 200, 60)
 
-        # color
+        # Color
         color1 = COLOR_GRAY_DARK
         color2 = COLOR_GRAY_DARK
 
@@ -225,8 +229,10 @@ def main_menu():
                 sys.exit()
         pygame.draw.rect(screen, color1, button_1)
         pygame.draw.rect(screen, color2, button_2)
-        draw_text("Play", score_font, (255, 255, 255), screen, screen.get_rect().centery + 185, button_1.y + 10)
-        draw_text("Exit", score_font, (255, 255, 255), screen, screen.get_rect().centery + 185, button_2.y + 10)
+        draw_text("Play", score_font, (255, 255, 255), screen,
+                  screen.get_rect().centery + 185, button_1.y + 10)
+        draw_text("Exit", score_font, (255, 255, 255), screen,
+                  screen.get_rect().centery + 185, button_2.y + 10)
         click = False
 
         for event in pygame.event.get():
@@ -262,13 +268,14 @@ while game_loop:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_loop = False
-        #  keystroke events
+        #  Keystroke events
         if event.type == pygame.KEYDOWN:
             if event.key == K_UP:
                 player1.move_up = True
             if event.key == K_DOWN:
                 player1.move_down = True
-            if event.key == K_r and game_state == "Game" and (score_1 == SCORE_MAX or score_2 == SCORE_MAX):
+            if event.key == K_r and game_state == "Game" and (
+                    score_1 == SCORE_MAX or score_2 == SCORE_MAX):
                 restart_game()
         if event.type == pygame.KEYUP:
             if event.key == K_UP:
@@ -277,11 +284,11 @@ while game_loop:
                 player1.move_down = False
     if game_state == "Menu":
         main_menu()
-    # checking the victory condition
+    # Checking the victory condition
     if score_1 < SCORE_MAX and score_2 < SCORE_MAX and game_state == "Game":
-        # clear screen
+        # Clear screen
         screen.fill(COLOR_BLACK)
-        # scoring points
+        # Scoring points
         if ball.rect.x < -50:
             ball.restart_ball()
             score_2 += 1
@@ -290,32 +297,39 @@ while game_loop:
             ball.restart_ball()
             score_1 += 1
             scoring_sound_effect.play()
-        # update objects
-        score_text = score_font.render(str(score_1) + ' x ' + str(score_2), True, COLOR_WHITE, COLOR_BLACK)
+        # Update objects
+        score_text = score_font.render(str(score_1) + ' x '
+                                       + str(score_2),
+                                       True, COLOR_WHITE, COLOR_BLACK)
         player1.update()
         player2.update()
         ball.update()
-        # drawing objects
+        # Drawing objects
         ball.render()
         player1.render()
         player2.render()
         screen.blit(score_text, score_text_rect)
     else:
-        # drawing victory
+        # Drawing victory
         screen.fill(COLOR_BLACK)
         press_r_frames += 1
         if press_r_frames >= 30:
-            draw_text('PRESS R TO RESTART', score_font, COLOR_WHITE, screen, 260, 600)
+            draw_text('PRESS R TO RESTART', score_font,
+                      COLOR_WHITE, screen, 260, 600)
             if press_r_frames >= 60:
                 press_r_frames = 0
         if score_1 == SCORE_MAX:
-            draw_text("VICTORY", victory_font, COLOR_WHITE, screen, victory_text_rect.x, victory_text_rect.y)
+            draw_text("VICTORY", victory_font, COLOR_WHITE, screen,
+                      victory_text_rect.x, victory_text_rect.y)
         else:
-            draw_text("DEFEAT", victory_font, COLOR_WHITE, screen, 360, victory_text_rect.y)
+            draw_text(
+                "DEFEAT", victory_font, COLOR_WHITE,
+                screen, 360, victory_text_rect.y)
         screen.blit(score_text, score_text_rect)
 
-    # update screen
+    # Update screen
     pygame.display.flip()
     game_clock.tick(60)
 
 pygame.quit()
+
