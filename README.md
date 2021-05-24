@@ -6,5 +6,5 @@ Este repositório tem como finalidade guardar as versões finais dos jogos Break
 # Autores
 
  - Amós Filho [Github](https://github.com/AmosFilho)
- - Angelo Filho[Github](https://github.com/angelo-filho)
- - Daniele Simas    [Github](https://github.com/danisimasuea)
+ - Angelo Filho [Github](https://github.com/angelo-filho)
+ - Daniele Simas  [Github](https://github.com/danisimasuea)
