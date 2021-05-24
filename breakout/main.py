@@ -148,7 +148,7 @@ def menu():
 
         if font_credits_rect.collidepoint((pos_x, pos_y)):
             if click:
-                credits()
+                credits_screen()
 
         if font_controls_rect.collidepoint((pos_x, pos_y)):
             if click:
@@ -271,7 +271,7 @@ def back():
 
 
 # Function Credits
-def credits():
+def credits_screen():
     click = False
     graphics = pygame.image.load('assets/screen_credits.png')
     while True:
@@ -592,4 +592,3 @@ def remake_game():
 
 # Init
 screen_init()
-
