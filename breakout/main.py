@@ -36,6 +36,7 @@ score_text = score_font.render('000   000', True, COLOR_BALL, COLOR_BLACK)
 score_text_rect = score_text.get_rect()
 score_text_rect.center = (200, 30)
 
+# Music
 background_music.play(-1)
 
 
@@ -121,16 +122,16 @@ def screen_init():
 # Function menu
 def menu():
     click = False
-    image = pygame.image.load('assets/main_menu.png')
+    png = pygame.image.load('assets/main_menu.png')
     while True:
         screen.fill(COLOR_BLACK)
-        screen.blit(image, (0, 0))
+        screen.blit(png, (0, 0))
         font_games = font.render('Games', True, COLOR_BALL)
-        font_controls = font.render('Controls', True, COLOR_BALL)
+        controls_font = font.render('Controls', True, COLOR_BALL)
         font_credits = font.render('Credits', True, COLOR_BALL)
         font_exit = font.render('Exit', True, COLOR_BALL)
         font_games_rect = font_games.get_rect()
-        font_controls_rect = font_controls.get_rect()
+        font_controls_rect = controls_font.get_rect()
         font_credits_rect = font_credits.get_rect()
         font_exit_rect = font_exit.get_rect()
         font_games_rect.center = (300, 350)
@@ -140,6 +141,7 @@ def menu():
 
         pos_x, pos_y = pygame.mouse.get_pos()
 
+        # Menu Buttons Options
         if font_games_rect.collidepoint((pos_x, pos_y)):
             if click:
                 games()
@@ -168,7 +170,7 @@ def menu():
                     click = True
 
         screen.blit(font_games, font_games_rect)
-        screen.blit(font_controls, font_controls_rect)
+        screen.blit(controls_font, font_controls_rect)
         screen.blit(font_credits, font_credits_rect)
         screen.blit(font_exit, font_exit_rect)
         pygame.display.update()
@@ -178,10 +180,10 @@ def menu():
 # Function controls
 def controls():
     click = False
-    image = pygame.image.load('assets/screen_controls.png')
+    graphics = pygame.image.load('assets/screen_controls.png')
     while True:
         screen.fill(COLOR_BLACK)
-        screen.blit(image, (0, 0))
+        screen.blit(graphics, (0, 0))
         font_back = font_controls.render('back to menu', True, COLOR_BALL)
         font_back_rect = font_back.get_rect()
         font_back_rect.center = (300, 680)
@@ -208,10 +210,11 @@ def controls():
 # Function Games
 def games():
     click = False
-    image = pygame.image.load('assets/screen_games.png')
+    graphics = pygame.image.load('assets/screen_games.png')
     while True:
+        # Create Games Screen
         screen.fill(COLOR_BLACK)
-        screen.blit(image, (0, 0))
+        screen.blit(graphics, (0, 0))
         font_classic_games = font.render('Classic', True, COLOR_BALL)
         font_remake_game = font.render('Remake', True, COLOR_BALL)
         font_back = font.render('back to menu', True, COLOR_BALL)
@@ -223,7 +226,6 @@ def games():
         font_back_rect.center = (300, 450)
 
         pos_x, pos_y = pygame.mouse.get_pos()
-
 
         if font_classic_games_rect.collidepoint((pos_x, pos_y)):
             if click:
@@ -332,6 +334,7 @@ def victory():
         main_clock.tick(FPS)
 
 
+# Create Loser Screen
 def loser(number):
     click = False
     image = pygame.image.load('assets/screen_loser.png')
@@ -398,6 +401,7 @@ def classic_game():
             if event.type == QUIT:
                 run = False
 
+        # Keyboard Settings
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
@@ -406,28 +410,29 @@ def classic_game():
             paddle.move_right()
 
         sprites.update()
-
+        # Lose Lives Condition
         if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
             lives += 1
             ball.state = ball.RESTART_STATE
             paddle.recovery_weight()
 
+        # Bricks Collision Settings
         bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
         for brick in bricks_collided:
             if ball.can_collide:
                 ball.collision_with_brick()
                 score += brick.score
                 brick.kill()
-
+        # Ball collision with paddle
         if ball.rect.colliderect(paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
-
+            # Ball reduce size
             if ball.touch_amount == 15:
                 paddle.lose_weight()
-
+            # Restart the bricks
             if len(bricks) == 0:
                 make_all_bricks(bricks, sprites)
-
+        # Victory and level up condition
         if len(bricks) == 0:
             level += 1
 
@@ -457,7 +462,6 @@ def classic_game():
 def remake_game():
     run = True
     sprites = pygame.sprite.Group()
-
     score = SCORE
     level = ROUND
     state = RUNNING
@@ -486,6 +490,7 @@ def remake_game():
         for event in pygame.event.get():
             if event.type == QUIT:
                 run = False
+            # Keyboard Settings
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     state = PAUSE
@@ -509,7 +514,7 @@ def remake_game():
                 paddle.life -= 1
                 ball.state = ball.RESTART_STATE
                 paddle.recovery_weight()
-
+        # Bricks collision and spawn power-ups
         bricks_collided = pygame.sprite.spritecollide(ball, bricks, False)
         for brick in bricks_collided:
             if ball.can_collide:
@@ -523,13 +528,13 @@ def remake_game():
 
                 score += brick.score
                 brick.kill()
-
+        # Ball collide with paddle
         if ball.rect.colliderect(paddle) and ball.dy > 0:
             ball.collision_with_paddle(paddle.rect)
-
+            # Reduce Ball Weight
             if ball.touch_amount == 26:
                 paddle.lose_weight()
-
+            # Level up condition
             if len(bricks) == 0:
                 make_all_bricks(bricks, sprites)
 
@@ -574,6 +579,7 @@ def remake_game():
         bullets.draw(screen)
         paddle.render(screen)
         screen.blit(hud_score, score_text_rect)
+        # Pause Button Settings
         if state == PAUSE:
             screen.blit(pause_text, (250, 350))
             screen.blit(back_game, (250, 400))
