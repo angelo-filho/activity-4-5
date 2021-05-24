@@ -1,6 +1,4 @@
 import sys
-import os
-
 from random import randint
 from model.Paddle import Paddle, PaddleRemake
 from model.Ball import Ball
@@ -53,7 +51,8 @@ def make_all_bricks(group_a, group_b):
             elif i in [4, 5]:
                 brick = Brick(COLOR_GREEN, BRICK_WIDTH, BRICK_HEIGHT, 1)
             brick.rect.x = BRICKS_GAP * j + j * BRICK_WIDTH
-            brick.rect.y = BRICKS_FIRST_ROW_Y + i * (BRICK_HEIGHT + BRICKS_GAP)
+            brick.rect.y = BRICKS_FIRST_ROW_Y + i * (BRICK_HEIGHT
+                                                     + BRICKS_GAP)
             group_a.add(brick)
             group_b.add(brick)
 
@@ -158,8 +157,7 @@ def menu():
                 pygame.quit()
                 sys.exit()
 
-        click = False
-
+        click = False 
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -225,7 +223,6 @@ def games():
         font_back_rect.center = (300, 450)
 
         pos_x, pos_y = pygame.mouse.get_pos()
-
 
         if font_classic_games_rect.collidepoint((pos_x, pos_y)):
             if click:
@@ -506,7 +503,8 @@ def remake_game():
             bullets.update()
             paddle.update(bullets)
             # Ball collisions
-            if ball.rect.bottom >= HEIGHT + 30 and ball.state == ball.MOVE_STATE:
+            if ball.rect.bottom >= HEIGHT + 30\
+                    and ball.state == ball.MOVE_STATE:
                 paddle.life -= 1
                 ball.state = ball.RESTART_STATE
                 paddle.recovery_weight()
@@ -551,7 +549,8 @@ def remake_game():
 
         # Bullets collisions
         for bullet in bullets:
-            bricks_collided = pygame.sprite.spritecollide(bullet, bricks, False)
+            bricks_collided = pygame.sprite.spritecollide(bullet, bricks,
+                                                          False)
             for brick in bricks_collided:
                 sound_hit_brick.play()
                 item = make_random_item(brick)
